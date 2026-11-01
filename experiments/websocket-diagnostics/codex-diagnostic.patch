@@ -1,0 +1,126 @@
+--- a/codex-api/src/endpoint/responses_websocket.rs
++++ b/codex-api/src/endpoint/responses_websocket.rs
+@@ -46,6 +46,21 @@
+ use tungstenite::extensions::compression::deflate::DeflateConfig;
+ use tungstenite::protocol::WebSocketConfig;
+ use url::Url;
++
++fn icm_diag(value: serde_json::Value) {
++    if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref() == Some("1") {
++        eprintln!("ICM_WS_DIAG {}", value);
++    }
++}
++
++fn icm_ws_error(err: &WsError) -> &'static str {
++    match err {
++        WsError::Http(_) => "http_handshake", WsError::Io(_) => "io",
++        WsError::Capacity(_) => "capacity", WsError::Protocol(_) => "protocol",
++        WsError::ConnectionClosed => "connection_closed", WsError::AlreadyClosed => "already_closed",
++        _ => "other",
++    }
++}
+ 
+ struct WsStream {
+     tx_command: mpsc::Sender<WsCommand>,
+@@ -500,7 +515,13 @@
+         .map_err(|err| ApiError::Stream(format!("failed to build websocket request: {err}")))?;
+     request.headers_mut().extend(headers);
+ 
++    let started = Instant::now();
+     let response = connector.connect(request, websocket_config()).await;
++    icm_diag(serde_json::json!({"event":"handshake", "elapsed_ms":started.elapsed().as_millis(),
++        "ok":response.is_ok(), "http_status":response.as_ref().map(|(_,r)|r.status().as_u16()).ok(),
++        "deflate_negotiated":response.as_ref().ok().and_then(|(_,r)|r.headers().get("sec-websocket-extensions")).and_then(|v|v.to_str().ok()).is_some_and(|v|v.contains("permessage-deflate")),
++        "error_kind":response.as_ref().err().map(icm_ws_error),
++        "error_http_status":response.as_ref().err().and_then(|e|if let WsError::Http(r)=e {Some(r.status().as_u16())} else {None})}));
+ 
+     let (stream, response) = match response {
+         Ok((stream, response)) => {
+@@ -715,6 +736,8 @@
+         let message = match response {
+             Ok(Some(Ok(msg))) => msg,
+             Ok(Some(Err(err))) => {
++                icm_diag(serde_json::json!({"event":"receive_error","kind":icm_ws_error(&err),
++                    "io_kind":if let WsError::Io(e)=&err {Some(format!("{:?}",e.kind()))} else {None}}));
+                 return Err(map_ws_stream_error(err));
+             }
+             Ok(None) => {
+@@ -736,6 +759,13 @@
+                     return Err(error);
+                 }
+ 
++                if let Ok(v) = serde_json::from_str::<Value>(&text) {
++                    if let Some(kind)=v.get("type").and_then(Value::as_str) {
++                        if matches!(kind,"response.created"|"response.completed"|"response.failed"|"error") {
++                            icm_diag(serde_json::json!({"event":"server_event","kind":kind,"bytes":text.len()}));
++                        }
++                    }
++                }
+                 let event = match serde_json::from_str::<ResponsesStreamEvent>(&text) {
+                     Ok(event) => event,
+                     Err(err) => {
+@@ -836,7 +866,10 @@
+             Message::Binary(_) => {
+                 return Err(ApiError::Stream("unexpected binary websocket event".into()));
+             }
+-            Message::Close(_) => {
++            Message::Close(frame) => {
++                icm_diag(serde_json::json!({"event":"close", "code":frame.as_ref().map(|f|u16::from(f.code)),
++                    "reason_bytes":frame.as_ref().map(|f|f.reason.len()),
++                    "reason_mentions_size":frame.as_ref().is_some_and(|f|{let r=f.reason.to_lowercase();r.contains("size")||r.contains("large")||r.contains("big")})}));
+                 return Err(ApiError::Stream(
+                     "websocket closed by server before response.completed".into(),
+                 ));
+@@ -899,6 +932,8 @@
+     connection_reused: bool,
+ ) -> Result<(), ApiError> {
+     let request_start = Instant::now();
++    let request_bytes = request_text.len();
++    icm_diag(serde_json::json!({"event":"send_start","json_bytes":request_bytes,"reused":connection_reused}));
+     let result = tokio::time::timeout(
+         idle_timeout,
+         ws_stream.send(Message::Text(request_text.into())),
+@@ -907,6 +942,7 @@
+     .map_err(|_| ApiError::Stream("idle timeout sending websocket request".into()))
+     .and_then(|result| result.map_err(map_ws_stream_error));
+ 
++    icm_diag(serde_json::json!({"event":"send_end","json_bytes":request_bytes,"ok":result.is_ok(),"elapsed_ms":request_start.elapsed().as_millis()}));
+     if let Some(t) = telemetry.as_ref() {
+         t.on_ws_request(
+             request_start.elapsed(),
+--- a/core/src/client.rs
++++ b/core/src/client.rs
+@@ -665,6 +665,9 @@
+         let activated =
+             websocket_enabled && !self.state.disable_websockets.swap(true, Ordering::Relaxed);
+         if activated {
++            if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref()==Some("1") {
++                eprintln!("ICM_WS_DIAG {{\"event\":\"fallback_to_http\"}}");
++            }
+             warn!("falling back to HTTP");
+             session_telemetry.counter(
+                 "codex.transport.fallback_to_http",
+@@ -2020,6 +2023,10 @@
+                 Some(continuation) => (Some(continuation.response_id), Some(continuation.items)),
+                 None => (None, None),
+             };
++            if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref()==Some("1") {
++                eprintln!("ICM_WS_DIAG {}",serde_json::json!({"event":"request_mode","mode":mode,"reason":reason,
++                    "warmup":warmup,"full_items":request.input.len(),"delta_items":incremental_items.as_ref().map(Vec::len),"previous_response":previous_response_id.is_some()}));
++            }
+             let original_item_ids = if let Some(incremental_items) = &mut incremental_items {
+                 self.client
+                     .prepare_response_items_for_request(incremental_items);
+--- a/websocket-client/src/lib.rs
++++ b/websocket-client/src/lib.rs
+@@ -174,6 +174,10 @@
+                 request.headers_mut().insert(COOKIE, cookies);
+             }
+             let proxy_route = route.await.map_err(WebSocketError::Io)?;
++            if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref()==Some("1") {
++                let kind=match &proxy_route {OutboundProxyRoute::TransportDefault=>"transport_default",OutboundProxyRoute::Direct=>"direct",OutboundProxyRoute::Proxy{..}=>"proxy"};
++                eprintln!("ICM_WS_DIAG {{\"event\":\"proxy_route\",\"kind\":\"{kind}\"}}");
++            }
+             let result = dialer::connect(
+                 request,
+                 config,

@@ -1,0 +1,289 @@
+{
+  "status": "narrowed_not_fixed",
+  "valid_turns": 7,
+  "invalid_setup_turns": 3,
+  "valid_answer_correct": 7,
+  "valid_protocol_ok": 5,
+  "failures_retained": true,
+  "frame_write_totals_equal": true,
+  "rows": [
+    {
+      "turn_index": 0,
+      "answer_correct": false,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 4.883,
+      "e2e_seconds": 5.290886792,
+      "actual_socket_bytes_out": 90010,
+      "case": "small",
+      "classification": "invalid-setup",
+      "json_sends": [
+        65534,
+        119387
+      ],
+      "frame_bytes": [
+        22839,
+        42129
+      ],
+      "above_tls_accepted_bytes": 64968,
+      "close_codes": [],
+      "handshakes": 1,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 1,
+      "answer_correct": false,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 2.132,
+      "e2e_seconds": 3.2345416670000002,
+      "actual_socket_bytes_out": 5565,
+      "case": "small",
+      "classification": "invalid-setup",
+      "json_sends": [
+        2296
+      ],
+      "frame_bytes": [
+        248
+      ],
+      "above_tls_accepted_bytes": 248,
+      "close_codes": [],
+      "handshakes": 0,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 2,
+      "answer_correct": false,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 2.997,
+      "e2e_seconds": 3.613782582999999,
+      "actual_socket_bytes_out": 5475,
+      "case": "small",
+      "classification": "invalid-setup",
+      "json_sends": [
+        2296
+      ],
+      "frame_bytes": [
+        158
+      ],
+      "above_tls_accepted_bytes": 158,
+      "close_codes": [],
+      "handshakes": 0,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 0,
+      "answer_correct": true,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 4.767,
+      "e2e_seconds": 4.825965,
+      "actual_socket_bytes_out": 91716,
+      "case": "small-valid",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        65534,
+        125375
+      ],
+      "frame_bytes": [
+        22840,
+        46723
+      ],
+      "above_tls_accepted_bytes": 69563,
+      "close_codes": [],
+      "handshakes": 1,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 1,
+      "answer_correct": true,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 2.271,
+      "e2e_seconds": 2.440285375,
+      "actual_socket_bytes_out": 5569,
+      "case": "small-valid",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        2296
+      ],
+      "frame_bytes": [
+        252
+      ],
+      "above_tls_accepted_bytes": 252,
+      "close_codes": [],
+      "handshakes": 0,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 2,
+      "answer_correct": true,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 2.791,
+      "e2e_seconds": 3.0053241670000013,
+      "actual_socket_bytes_out": 5472,
+      "case": "small-valid",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        2295
+      ],
+      "frame_bytes": [
+        155
+      ],
+      "above_tls_accepted_bytes": 155,
+      "close_codes": [],
+      "handshakes": 0,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 0,
+      "answer_correct": true,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 11.465,
+      "e2e_seconds": 11.560316416,
+      "actual_socket_bytes_out": 10676324,
+      "case": "four",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        65534,
+        14147876
+      ],
+      "frame_bytes": [
+        22845,
+        10597259
+      ],
+      "above_tls_accepted_bytes": 10620104,
+      "close_codes": [],
+      "handshakes": 1,
+      "fallback_to_http": 0,
+      "http_compression": []
+    },
+    {
+      "turn_index": 0,
+      "answer_correct": true,
+      "protocol_ok": false,
+      "retry_notifications": 5,
+      "ttft_seconds": 57.439,
+      "e2e_seconds": 57.622156666,
+      "actual_socket_bytes_out": 92876128,
+      "case": "five",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        65534,
+        17653059,
+        17653059,
+        17653059,
+        17653059,
+        17653059,
+        17653059
+      ],
+      "frame_bytes": [
+        22845,
+        13234328,
+        13235218,
+        13235218,
+        13235224,
+        13235213,
+        13235214
+      ],
+      "above_tls_accepted_bytes": 79433260,
+      "close_codes": [
+        1009,
+        1009,
+        1009,
+        1009,
+        1009,
+        1009
+      ],
+      "handshakes": 6,
+      "fallback_to_http": 1,
+      "http_compression": [
+        {
+          "pre_compression_bytes": 17652915,
+          "post_compression_bytes": 13194130,
+          "compression_duration_ms": 107
+        }
+      ]
+    },
+    {
+      "turn_index": 0,
+      "answer_correct": true,
+      "protocol_ok": false,
+      "retry_notifications": 5,
+      "ttft_seconds": 57.024,
+      "e2e_seconds": 57.245141292,
+      "actual_socket_bytes_out": 92896154,
+      "case": "five-repeat",
+      "classification": "valid-diagnostic",
+      "json_sends": [
+        65534,
+        17653108,
+        17653108,
+        17653108,
+        17653108,
+        17653108,
+        17653108
+      ],
+      "frame_bytes": [
+        22843,
+        13234356,
+        13235240,
+        13235244,
+        13235242,
+        13235246,
+        13235241
+      ],
+      "above_tls_accepted_bytes": 79433412,
+      "close_codes": [
+        1009,
+        1009,
+        1009,
+        1009,
+        1009,
+        1009
+      ],
+      "handshakes": 6,
+      "fallback_to_http": 1,
+      "http_compression": [
+        {
+          "pre_compression_bytes": 17652964,
+          "post_compression_bytes": 13193230,
+          "compression_duration_ms": 108
+        }
+      ]
+    },
+    {
+      "turn_index": 0,
+      "answer_correct": true,
+      "protocol_ok": true,
+      "retry_notifications": 0,
+      "ttft_seconds": 10.372,
+      "e2e_seconds": 10.609453457999999,
+      "actual_socket_bytes_out": 13243020,
+      "case": "http-five",
+      "classification": "valid-diagnostic",
+      "json_sends": [],
+      "frame_bytes": [],
+      "above_tls_accepted_bytes": 0,
+      "close_codes": [],
+      "handshakes": 0,
+      "fallback_to_http": 0,
+      "http_compression": [
+        {
+          "pre_compression_bytes": 17652950,
+          "post_compression_bytes": 13193172,
+          "compression_duration_ms": 106
+        }
+      ]
+    }
+  ]
+}

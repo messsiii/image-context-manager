@@ -1,0 +1,26 @@
+Image Context Manager
+Copyright (c) 2026 messsiii
+
+The root MIT LICENSE applies to first-party Python source, tests, examples,
+documentation and original evaluation summaries, except where noted below.
+
+experiments/codex/history-host.patch and
+experiments/websocket-diagnostics/codex-diagnostic.patch contain modifications
+and context derived from OpenAI Codex rust-v0.162.1 (Apache License 2.0).
+Those patches, including first-party additions within them, are distributed
+under Apache-2.0, not the root MIT license. Upstream license and NOTICE are
+preserved as experiments/codex/UPSTREAM_LICENSE and UPSTREAM_NOTICE.
+Modified functionality: isolated debug host/config selection, HTTP experiment
+switch, request-copy image transform, and opt-in metadata diagnostics.
+
+experiments/websocket-diagnostics/tungstenite-diagnostic.patch modifies
+openai-oss-forks/tungstenite-rs revision
+4fffad30fe373adbdcffab9545e9e9bf4f2fc19f. This patch is distributed under the
+upstream MIT OR Apache-2.0 terms (including additions), with the upstream
+LICENSE-MIT and LICENSE-APACHE preserved in that directory. Modification:
+opt-in frame sizes and accepted-write byte counters only.
+
+Pillow is an external runtime dependency and retains its HPND license and
+third-party notices. Setuptools and wheel are external build dependencies
+with their own licenses. Their source/binaries are not vendored here.
+No Codex, Rust toolchain, model weights or third-party screenshots are bundled.

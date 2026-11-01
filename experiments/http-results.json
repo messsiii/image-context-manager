@@ -1,0 +1,97 @@
+{
+  "arms": {
+    "A": {
+      "attempts": 35,
+      "quality_passes": 35,
+      "answers_correct": 35,
+      "ttft_observed": 35,
+      "workflows": [
+        {
+          "repetition": 0,
+          "complete": true,
+          "e2e_seconds": 57.31611041700005,
+          "bytes_out": 61018640
+        },
+        {
+          "repetition": 1,
+          "complete": true,
+          "e2e_seconds": 60.876966877000086,
+          "bytes_out": 61033181
+        },
+        {
+          "repetition": 2,
+          "complete": true,
+          "e2e_seconds": 53.78349970900024,
+          "bytes_out": 61077625
+        },
+        {
+          "repetition": 3,
+          "complete": true,
+          "e2e_seconds": 58.09587491899981,
+          "bytes_out": 61064097
+        },
+        {
+          "repetition": 4,
+          "complete": true,
+          "e2e_seconds": 57.08991670800003,
+          "bytes_out": 61067556
+        }
+      ]
+    },
+    "B": {
+      "attempts": 35,
+      "quality_passes": 35,
+      "answers_correct": 35,
+      "ttft_observed": 35,
+      "workflows": [
+        {
+          "repetition": 0,
+          "complete": true,
+          "e2e_seconds": 51.57604079200001,
+          "bytes_out": 18879555
+        },
+        {
+          "repetition": 1,
+          "complete": true,
+          "e2e_seconds": 40.47060491999997,
+          "bytes_out": 18886726
+        },
+        {
+          "repetition": 2,
+          "complete": true,
+          "e2e_seconds": 42.525716497000246,
+          "bytes_out": 18912265
+        },
+        {
+          "repetition": 3,
+          "complete": true,
+          "e2e_seconds": 41.79172050200003,
+          "bytes_out": 18910882
+        },
+        {
+          "repetition": 4,
+          "complete": true,
+          "e2e_seconds": 36.59874516699995,
+          "bytes_out": 18889963
+        }
+      ]
+    }
+  },
+  "ratios": {
+    "cumulative_bytes_B_over_A": 0.3095035407705192,
+    "median_ttft_B_over_A": 0.6880949276307211,
+    "median_workflow_e2e_B_over_A": 0.729144392352286
+  },
+  "gates": {
+    "five_complete_pairs": true,
+    "bytes": true,
+    "ttft": true,
+    "net_benefit": true
+  },
+  "effectiveness_gate_pass": true,
+  "actual_cost": null,
+  "byte_scope": "macOS nettop process-lifetime bytes_out for the isolated app-server PID; all socket traffic including startup/control, TLS and retries/fallback; not JSON bytes, image bytes, IP/link overhead, or guaranteed server receipt",
+  "planned_turns": 70,
+  "attempts": 70,
+  "pilot": false
+}

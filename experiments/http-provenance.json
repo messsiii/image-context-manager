@@ -1,0 +1,29 @@
+{
+  "origin": "Existing fourth-round local evidence, checked during packaging; not rerun",
+  "planned_turns": 70,
+  "attempts": 70,
+  "strict_passes": {
+    "A": 35,
+    "B": 35
+  },
+  "ratios": {
+    "cumulative_bytes_B_over_A": 0.3095035407705192,
+    "median_ttft_B_over_A": 0.6880949276307211,
+    "median_workflow_e2e_B_over_A": 0.729144392352286
+  },
+  "gates": {
+    "five_complete_pairs": true,
+    "bytes": true,
+    "ttft": true,
+    "net_benefit": true
+  },
+  "effectiveness_gate_pass": true,
+  "scope": "Synthetic seven-task workflow, five independent A/B pairs, isolated native HTTP host. Not default Codex or real ASC; actual cost not measured.",
+  "source_report_sha256": "939361ca70a0acdc403015cb061fe58902d99f4178853e6ac97e9d1d8cc475b1",
+  "source_validation_document_sha256": "0b875973683e2e746c2d29737159a675624d99f6a39e0bb59dd13056b77d0be7",
+  "retained_files_sha256": {
+    "core.py": "512ddc949b1f7e70a6458327167d476ecec92d34e44e2ee1d7cb5e945b7e1e0e",
+    "history.py": "7bced2b7448a4bae187c59343946bb2f63ace9dc17e5a29083451de1c46151c8"
+  },
+  "new_packaging_does_not_change_formal_sources": true
+}

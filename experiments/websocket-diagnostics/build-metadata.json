@@ -1,0 +1,20 @@
+{
+  "source_url": "https://codeload.github.com/openai/codex/tar.gz/refs/tags/rust-v0.162.1",
+  "source_sha256": "e709bda93494c000a69d4c07a85a1975ce433f5541e737d1a5feddd399c97c60",
+  "source_tag": "rust-v0.162.1",
+  "platform": "aarch64-apple-darwin",
+  "rust": "1.95.0",
+  "profile": "dev-small",
+  "diagnostic_binary_sha256": "52936b28506669b8d47e011018e079c2e769bddf792eccfef1fa88c75d42752f",
+  "previous_round4_binary_sha256": "42738bcf0ce04700bece3d38b06afb31b2f5db076f6540ce8160702e69a7292b",
+  "cargo_lock_sha256": "a403034f26c9be082e3619976b24b8c7f0b97018edf81944a8ae60b106fb75cd",
+  "base_patch": "../codex/history-host.patch",
+  "base_patch_sha256": "5168debab4d5c9eed374b898b5c32d6536607d6f1dfd42729e5239d5352b02c1",
+  "tungstenite_rev": "4fffad30fe373adbdcffab9545e9e9bf4f2fc19f",
+  "tokio_tungstenite_rev": "0e5b2d73aa18dd9f0a50ee9ff199d5aef7594186",
+  "diagnostic_gate": "debug_assertions && ICM_WS_DIAGNOSTIC=1",
+  "changes": "metadata-only instrumentation; no transport retry/limit/auth/endpoint behavior change",
+  "installed_codex_modified": false,
+  "global_config_modified": false,
+  "private_history_modified": false
+}

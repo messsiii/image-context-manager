@@ -1,0 +1,36 @@
+{
+  "source_url": "https://codeload.github.com/openai/codex/tar.gz/refs/tags/rust-v0.162.1",
+  "source_sha256": "e709bda93494c000a69d4c07a85a1975ce433f5541e737d1a5feddd399c97c60",
+  "source_tag": "rust-v0.162.1",
+  "rust_version": "1.95.0",
+  "profile": "dev-small",
+  "target": "aarch64-apple-darwin",
+  "third_party_dependency_updates": false,
+  "lock_delta": {
+    "workspace_version_alignments": 161,
+    "additional_workspace_dependency_edges": {
+      "codex-core": [
+        " \"sha2 0.10.9\","
+      ]
+    },
+    "third_party_package_version_changes": [],
+    "packages_added": [],
+    "packages_removed": []
+  },
+  "binary_sha256": "42738bcf0ce04700bece3d38b06afb31b2f5db076f6540ce8160702e69a7292b",
+  "patch_sha256": "5168debab4d5c9eed374b898b5c32d6536607d6f1dfd42729e5239d5352b02c1",
+  "installed_codex_modified": false,
+  "global_config_modified": false,
+  "authentication_or_endpoint_patch": false,
+  "patch_file": "history-host.patch",
+  "history_adapter": "debug-only process env plan transforms real request input copy; no persisted history edits",
+  "added_dependency": "sha2 workspace 0.10 already present in locked dependency graph; no new version resolution",
+  "source_files": [
+    "codex-rs/app-server/src/main.rs",
+    "codex-rs/core/src/client.rs",
+    "codex-rs/core/src/lib.rs",
+    "codex-rs/core/Cargo.toml",
+    "codex-rs/core/src/icm_experiment.rs"
+  ],
+  "runtime_plan": "per-host experiment-owned JSON path, exact ordinal+URL SHA256 validation, fail closed, numeric/hash-only assembly audit"
+}

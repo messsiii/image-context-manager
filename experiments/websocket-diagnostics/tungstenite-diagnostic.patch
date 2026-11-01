@@ -1,0 +1,22 @@
+--- a/src/protocol/frame/mod.rs
++++ b/src/protocol/frame/mod.rs
+@@ -256,6 +256,9 @@
+ 
+         trace!("writing frame {frame}");
+ 
++        if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref()==Some("1") {
++            eprintln!("ICM_WS_DIAG {{\"event\":\"frame_buffered\",\"frame_bytes\":{},\"payload_bytes\":{},\"rsv1\":{},\"fin\":{}}}",frame.len(),frame.payload().len(),frame.header().rsv1,frame.header().is_final);
++        }
+         self.out_buffer.reserve(frame.len());
+         frame.format_into_buf(&mut self.out_buffer).expect("Bug: can't write to vector");
+ 
+@@ -283,6 +286,9 @@
+                 )
+                 .into());
+             }
++            if cfg!(debug_assertions) && std::env::var("ICM_WS_DIAGNOSTIC").ok().as_deref()==Some("1") {
++                eprintln!("ICM_WS_DIAG {{\"event\":\"frame_stream_write\",\"accepted_bytes\":{len}}}");
++            }
+             self.out_buffer.drain(0..len);
+         }
+ 

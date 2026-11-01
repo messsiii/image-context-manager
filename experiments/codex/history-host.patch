@@ -1,0 +1,150 @@
+--- a/codex-rs/app-server/src/main.rs
++++ b/codex-rs/app-server/src/main.rs
+@@ -30,6 +30,10 @@
+ #[derive(Debug, Parser)]
+ #[command(version)]
+ struct AppServerArgs {
++    /// Experimental local harness: same loader switch as codex exec.
++    #[arg(long, hide = true)]
++    icm_ignore_user_config: bool,
++
+     #[command(flatten)]
+     config_overrides: CliConfigOverrides,
+ 
+@@ -80,6 +84,7 @@
+     let remote_control_disabled = codex_app_server::take_remote_control_disabled_env();
+     arg0_dispatch_or_else(move |arg0_paths: Arg0DispatchPaths| async move {
+         let AppServerArgs {
++            icm_ignore_user_config,
+             config_overrides,
+             code_mode_host,
+             listen,
+@@ -91,13 +96,14 @@
+             remote_control,
+             managed_daemon,
+         } = AppServerArgs::parse();
+-        let loader_overrides = if disable_managed_config_from_debug_env() {
++        let mut loader_overrides = if disable_managed_config_from_debug_env() {
+             LoaderOverrides::without_managed_config_for_tests()
+         } else {
+             managed_config_path_from_debug_env()
+                 .map(LoaderOverrides::with_managed_config_path_for_tests)
+                 .unwrap_or_default()
+         };
++        loader_overrides.ignore_user_config = icm_ignore_user_config;
+         let transport = listen;
+         let auth = auth.try_into_settings()?;
+         let mut runtime_options = AppServerRuntimeOptions {
+--- a/codex-rs/core/src/client.rs
++++ b/codex-rs/core/src/client.rs
+@@ -530,7 +530,12 @@
+                 concurrent_reasoning_summaries_enabled,
+                 include_attestation,
+                 attestation_provider,
+-                disable_websockets: AtomicBool::new(false),
++                // Isolated debug-host experiment: select the existing native HTTP path
++                // from the first request. Auth, endpoint resolution and retries are unchanged.
++                disable_websockets: AtomicBool::new(
++                    cfg!(debug_assertions)
++                        && std::env::var("ICM_EXPERIMENT_HTTP_ONLY").ok().as_deref() == Some("1"),
++                ),
+                 agent_identity_session_fallback: AgentIdentitySessionFallback::default(),
+                 cached_websocket_session: StdMutex::new(WebsocketSession::default()),
+                 last_inference_tools: StdMutex::new(None),
+@@ -899,6 +904,7 @@
+         include_internal: bool,
+     ) -> Result<ResponsesApiRequest> {
+         let mut input = prompt.get_formatted_input_for_request(model_info);
++        crate::icm_experiment::transform(&mut input).map_err(CodexErr::Fatal)?;
+         if !self.reasoning_effort_override_enabled(model_info) {
+             // Unsupported models and disabled overrides must also accept saved history.
+             // Filter only the request copy; persisted history remains unchanged.
+--- a/codex-rs/core/src/lib.rs
++++ b/codex-rs/core/src/lib.rs
+@@ -9,6 +9,7 @@
+ mod apps;
+ mod client;
+ mod client_common;
++mod icm_experiment;
+ mod model_request;
+ mod realtime_context;
+ mod realtime_conversation;
+--- a/codex-rs/core/Cargo.toml
++++ b/codex-rs/core/Cargo.toml
+@@ -108,6 +108,7 @@
+ serde = { workspace = true, features = ["derive"] }
+ serde_json = { workspace = true }
+ sha1 = { workspace = true }
++sha2 = { workspace = true }
+ shlex = { workspace = true }
+ similar = { workspace = true }
+ tempfile = { workspace = true }
+--- /dev/null
++++ b/codex-rs/core/src/icm_experiment.rs
+@@ -0,0 +1,66 @@
++//! Debug-only request-copy adapter. No persisted history or authentication changes.
++use codex_protocol::models::{ContentItem, ImageReference, ResponseItem};
++use serde::Deserialize;
++use sha2::{Digest, Sha256};
++use std::collections::HashSet;
++use std::io::Write;
++
++#[derive(Deserialize)]
++#[serde(deny_unknown_fields)]
++struct Replacement { ordinal: usize, expected_sha256: String, reference: String }
++#[derive(Deserialize)]
++#[serde(deny_unknown_fields)]
++struct Plan { generation: String, expected_images: usize, replacements: Vec<Replacement> }
++
++pub(crate) fn transform(input: &mut [ResponseItem]) -> Result<(), String> {
++    if !cfg!(debug_assertions) { return Ok(()); }
++    let Some(path) = std::env::var_os("ICM_EXPERIMENT_HISTORY_PLAN") else { return Ok(()); };
++    let start = std::time::Instant::now();
++    let plan: Plan = serde_json::from_slice(&std::fs::read(&path).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
++    let mut before = Vec::new();
++    for item in input.iter() {
++        if let ResponseItem::Message { content, .. } = item {
++            for c in content {
++                if let ContentItem::InputImage { image, .. } = c {
++                    match image {
++                        ImageReference::Inline { image_url } => before.push((format!("{:x}", Sha256::digest(image_url.as_bytes())), image_url.len())),
++                        _ => return Err("ICM experiment requires inline images".into()),
++                    }
++                }
++            }
++        }
++    }
++    if before.len() != plan.expected_images { return Err("ICM image count mismatch; refusing request".into()); }
++    let mut targets = HashSet::new();
++    for r in &plan.replacements {
++        if !targets.insert(r.ordinal) || r.reference.is_empty() || before.get(r.ordinal).map(|v| &v.0) != Some(&r.expected_sha256) {
++            return Err("ICM replacement source/ordinal mismatch; refusing request".into());
++        }
++    }
++    // Validate the entire plan before mutating any item. Current images are excluded by the planner.
++    let mut ordinal = 0;
++    let mut kept = Vec::new();
++    for item in input.iter_mut() {
++        if let ResponseItem::Message { content, .. } = item {
++            for c in content {
++                if matches!(c, ContentItem::InputImage { .. }) {
++                    if let Some(r) = plan.replacements.iter().find(|r| r.ordinal == ordinal) {
++                        *c = ContentItem::InputText { text: r.reference.clone() };
++                    } else { kept.push(ordinal); }
++                    ordinal += 1;
++                }
++            }
++        }
++    }
++    let audit = serde_json::json!({"generation": plan.generation, "before_image_count": before.len(),
++        "before_images": before.iter().enumerate().map(|(i,(hash,bytes))|serde_json::json!({"ordinal":i,"url_sha256":hash,"url_bytes":bytes})).collect::<Vec<_>>(),
++        "replaced_ordinals": plan.replacements.iter().map(|r|r.ordinal).collect::<Vec<_>>(),
++        "kept_ordinals": kept, "after_image_count": kept.len(),
++        "after_image_url_bytes": kept.iter().map(|i|before[*i].1).sum::<usize>(),
++        "transform_duration_us":start.elapsed().as_micros(), "request_copy_only":true});
++    let mut audit_path = std::path::PathBuf::from(path);
++    audit_path.set_extension("audit.jsonl");
++    let mut file = std::fs::OpenOptions::new().create(true).append(true).open(audit_path).map_err(|e|e.to_string())?;
++    writeln!(file,"{}",audit).map_err(|e|e.to_string())?;
++    Ok(())
++}

@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image-context-manager"
+version = "0.1.1a1"
+description = "Host-owned request-time image lifecycle management for agent harnesses (experimental)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [{name = "messsiii"}]
+dependencies = ["Pillow==11.3.0"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "License :: OSI Approved :: MIT License",
+]
+
+[project.urls]
+Repository = "https://github.com/messsiii/image-context-manager"
+Documentation = "https://github.com/messsiii/image-context-manager#readme"
+
+[project.scripts]
+icm-demo = "image_context_manager.demo:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
