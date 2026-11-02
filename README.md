@@ -200,7 +200,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 <img alt="Historical isolated HTTP synthetic benchmark. Both arms passed 35 of 35 strict checks. Managed/replay ratios: cumulative socket sends 0.3095, median TTFT 0.6881, median workflow E2E 0.7291. These are separate measures, not token or billing savings." src="docs/images/reference/benchmark-en.jpg" width="100%">
 
-Existing evidence only: seven synthetic tasks, five A/B pairs, 70 strict checks in an isolated Codex HTTP host. Both arms passed 35/35. Socket sends include startup, TLS, retries and fallback; TTFT and workflow E2E are separate measures. This is not default Codex, real ASC, billing or universal benefit evidence. WebSocket close 1009 remains unresolved. [Results and provenance ↗](experiments/README.md)
+Existing evidence only: seven synthetic tasks, five A/B pairs, 70 strict checks in an isolated Codex HTTP host. Both arms passed 35/35. B/A ratios: cumulative socket sends **0.3095**, median turn TTFT **0.6881**, median complete-workflow E2E **0.7291**. Socket sends include startup, TLS, retries and fallback; TTFT and workflow E2E are separate measures. This is not default Codex, real ASC, billing or universal benefit evidence. WebSocket close 1009 remains unresolved. [Results and provenance ↗](experiments/README.md)
 
 ## Lifecycle rules, host contracts, recall, experiments, and more in the [Docs ↗](docs/GUIDE.md)
 

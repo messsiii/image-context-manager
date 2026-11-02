@@ -200,7 +200,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 <img alt="历史隔离HTTP合成基准：两组均通过35/35严格检查。管理组/重发组比值：累计socket发送0.3095，逐轮TTFT中位数0.6881，整流程E2E中位数0.7291。三个指标独立，不代表token或计费节省。" src="docs/images/reference/benchmark-zh-CN.jpg" width="100%">
 
-仅展示既有证据：隔离 Codex HTTP 宿主、7 项合成任务、5 对 A/B、70 次严格检查，两组各通过 35/35。socket 发送包括启动、TLS、重试与回退；TTFT 和整流程 E2E 分别统计。这不能证明默认 Codex、真实 ASC、计费或通用收益。WebSocket 关闭码 1009 仍未解决。[结果与来源 ↗](experiments/README.md)
+仅展示既有证据：隔离 Codex HTTP 宿主、7 项合成任务、5 对 A/B、70 次严格检查，两组各通过 35/35。B/A 比值：累计 socket 发送 **0.3095**、逐轮 TTFT 中位数 **0.6881**、完整工作流 E2E 中位数 **0.7291**。socket 发送包括启动、TLS、重试与回退；TTFT 和整流程 E2E 分别统计。这不能证明默认 Codex、真实 ASC、计费或通用收益。WebSocket 关闭码 1009 仍未解决。[结果与来源 ↗](experiments/README.md)
 
 ## 生命周期、宿主契约、召回与实验等内容，见[文档 ↗](docs/GUIDE.zh-CN.md)
 
