@@ -323,10 +323,10 @@ If you use Image Context Manager in your research or project, please cite:
 
 <img src="docs/images/reference/studio.jpg" alt="AI-generated illustrative office still life; not the author's actual office or a founder photograph." width="400"/>
 
-[![Source](https://img.shields.io/badge/source-GitHub-lightgrey?style=social)](https://github.com/messsiii/image-context-manager)
+[![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
 &emsp;&emsp;&emsp;
-[![License](https://img.shields.io/badge/license-MIT-lightgrey?style=social)](LICENSE)
+[![License](docs/images/reference/footer-license.svg)](LICENSE)
 
 </div>
 
-<div align="center"> Experimental open source · Original illustrative art · <a href="docs/images/reference/ATTRIBUTION.md">Diagram and layout attribution</a> </div>
+<div align="center"> Experimental open source · AI-generated office illustration · <a href="docs/images/reference/ATTRIBUTION.md">Diagram and layout attribution</a> </div>

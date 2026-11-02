@@ -323,10 +323,10 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 <img src="docs/images/reference/studio.jpg" alt="AI生成的办公室静物示意图，不是作者的真实办公室或创始人照片。" width="400"/>
 
-[![Source](https://img.shields.io/badge/source-GitHub-lightgrey?style=social)](https://github.com/messsiii/image-context-manager)
+[![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
 &emsp;&emsp;&emsp;
-[![License](https://img.shields.io/badge/license-MIT-lightgrey?style=social)](LICENSE)
+[![License](docs/images/reference/footer-license.svg)](LICENSE)
 
 </div>
 
-<div align="center"> 实验性开源项目 · 原创示意图 · <a href="docs/images/reference/ATTRIBUTION.md">图示与布局归属</a> </div>
+<div align="center"> 实验性开源项目 · AI 生成办公室示意图 · <a href="docs/images/reference/ATTRIBUTION.md">图示与布局归属</a> </div>
