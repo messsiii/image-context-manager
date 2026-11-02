@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1096" viewBox="0 0 600 1096" role="img" aria-labelledby="title desc">
+<title id="title">每轮决策：像素，还是引用？</title>
+<desc id="desc">宿主控制的每轮决策。受保护证据保留像素，只有未受保护且满足资格的旧图才能转引用。校验副本后由宿主适配发送；后续需要像素时再恢复。</desc>
+<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.title{font-size:28px;font-weight:700}.label{font-size:26px;font-weight:650}.body{font-size:26px}</style>
+<rect width="600" height="1096" rx="16" fill="#f5f8fb"/>
+<text class="title" x="28" y="48">每轮决策：像素，还是引用？</text>
+<rect x="24" y="80" width="552" height="124" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="80" width="6" height="124" rx="3" fill="#71562e"/>
+<text class="label" x="44" y="116">1 · 宿主登记实际输入</text>
+<text class="body" x="44" y="154">保存原图，保留完整原始历史。</text>
+<text class="body" x="44" y="186">逐次登记附件，绑定 URL 哈希。</text>
+<path d="M300 210 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="234" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="234" width="6" height="156" rx="3" fill="#71562e"/>
+<text class="label" x="44" y="270">2 · 宿主声明用途和状态</text>
+<text class="body" x="44" y="308">当前、待核验、不确定、明确要求？</text>
+<text class="body" x="44" y="340">进行中、已召回、比较、质量、</text>
+<text class="body" x="44" y="372">关系或操作任务？→ 保留像素。</text>
+<path d="M300 396 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="420" width="552" height="188" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="420" width="6" height="188" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="456">3 · 只检查未受保护的旧图</text>
+<text class="body" x="44" y="494">已完成 / 已失效，且置信度足够？</text>
+<text class="body" x="44" y="526">来源、版本、阶段、绑定与结果匹配？</text>
+<text class="body" x="44" y="558">宿主确认结果足够支持下一步？</text>
+<text class="body" x="44" y="590">全部通过 → 引用；否则 → 像素。</text>
+<path d="M300 614 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="638" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="638" width="6" height="156" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="674">4 · 组件生成副本 → 宿主发送</text>
+<text class="body" x="44" y="712">生成计划，校验后变换请求副本。</text>
+<text class="body" x="44" y="744">计划错误 → 停止并修复。</text>
+<text class="body" x="44" y="776">宿主适配格式，检查实际内容再发送。</text>
+<rect x="24" y="824" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="824" width="6" height="156" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="860">之后 · 宿主再次需要像素</text>
+<text class="body" x="44" y="898">比较：从完整原始历史重新构建。</text>
+<text class="body" x="44" y="930">召回：校验原图哈希，作为新附件</text>
+<text class="body" x="44" y="962">加入、登记并保护。</text>
+<text class="body" x="28" y="1010">任务或状态变化时重新评估。</text>
+<text class="body" x="28" y="1042">完整原始历史和原图文件保持不变。</text>
+</svg>

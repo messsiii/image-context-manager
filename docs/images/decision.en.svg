@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1096" viewBox="0 0 600 1096" role="img" aria-labelledby="title desc">
+<title id="title">Each turn: pixels or reference?</title>
+<desc id="desc">Host-controlled per-turn decision flow. Protected evidence stays as pixels. Only unprotected eligible history becomes a reference. Validate a copy, adapt and send; restoration happens when later tasks require pixels.</desc>
+<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.title{font-size:28px;font-weight:700}.label{font-size:26px;font-weight:650}.body{font-size:26px}</style>
+<rect width="600" height="1096" rx="16" fill="#f5f8fb"/>
+<text class="title" x="28" y="48">Each turn: pixels or reference?</text>
+<rect x="24" y="80" width="552" height="124" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="80" width="6" height="124" rx="3" fill="#71562e"/>
+<text class="label" x="44" y="116">1 · HOST registers actual input</text>
+<text class="body" x="44" y="154">Store originals; keep canonical history.</text>
+<text class="body" x="44" y="186">Register each occurrence; bind URL hash.</text>
+<path d="M300 210 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="234" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="234" width="6" height="156" rx="3" fill="#71562e"/>
+<text class="label" x="44" y="270">2 · HOST declares tasks and state</text>
+<text class="body" x="44" y="308">Current, pending, uncertain, required?</text>
+<text class="body" x="44" y="340">Active, recalled, compare, quality,</text>
+<text class="body" x="44" y="372">relation or action? → KEEP PIXELS.</text>
+<path d="M300 396 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="420" width="552" height="188" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="420" width="6" height="188" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="456">3 · Check unprotected history only</text>
+<text class="body" x="44" y="494">Completed / invalidated + confident?</text>
+<text class="body" x="44" y="526">Bound source/version/stage + receipt?</text>
+<text class="body" x="44" y="558">Host confirms next task has enough?</text>
+<text class="body" x="44" y="590">ALL yes → REFERENCE; else → PIXELS.</text>
+<path d="M300 614 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
+<rect x="24" y="638" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="638" width="6" height="156" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="674">4 · COMPONENT copy → HOST send</text>
+<text class="body" x="44" y="712">Plan; validate; change a request copy.</text>
+<text class="body" x="44" y="744">Bad plan → stop and repair.</text>
+<text class="body" x="44" y="776">Host adapts, checks and sends copy.</text>
+<rect x="24" y="824" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
+<rect x="24" y="824" width="6" height="156" rx="3" fill="#285d8c"/>
+<text class="label" x="44" y="860">Later · HOST needs pixels again</text>
+<text class="body" x="44" y="898">Compare: rebuild from canonical history.</text>
+<text class="body" x="44" y="930">Recall: verify hash; attach and register</text>
+<text class="body" x="44" y="962">the original as a new protected image.</text>
+<text class="body" x="28" y="1010">Re-evaluate when tasks or state change.</text>
+<text class="body" x="28" y="1042">Original history and files stay intact.</text>
+</svg>

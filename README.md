@@ -1,29 +1,24 @@
 # Image Context Manager
 
-**Experimental Python component for developers who own an agent's request-building harness.**
-[中文说明](README.zh-CN.md) · [Integration contract](docs/INTEGRATION.md) · [Evidence and limits](experiments/README.md)
+**Keep needed pixels in an agent's context; replace eligible finished-task images with source-bound references.**
 
-An agent may keep sending screenshots from tasks it has already finished. A newer screenshot does not always replace an older one: the next task might need a comparison, an unresolved state, or the original pixels. Removing images without tracking their purpose can lose evidence; replaying everything can grow requests.
+[中文说明](README.zh-CN.md) · [Integration guide](docs/INTEGRATION.md) · [Experiment evidence](experiments/README.md)
 
-Image Context Manager lets your harness keep originals outside the request, track each attachment's source/version/task, and replace eligible completed-task images with source-bound text references. When the task needs pixels again, your harness restores them from canonical history or explicitly recalls the byte-exact original.
+Long agent sessions can resend screenshots whose tasks are already finished. This experimental Python component helps **developers who control the final request** decide which image occurrences still need pixels, keep originals outside requests, and restore them when needed. The host owns task decisions and sending; the component plans and validates a request copy.
 
-![Image lifecycle: track attachments, retire eligible history, protect needed evidence, and restore originals.](docs/images/lifecycle.en.svg)
+## Is this useful for your harness?
 
-*Conceptual lifecycle for the default `HistoricalImages` path. Retirement changes a request copy; it does not delete canonical history or stored originals.*
+| Your situation | Where to start |
+|---|---|
+| Many screenshots accumulate across a long, multi-step task; you own history and request assembly | Try the offline demo, then adapt the lifecycle policy to your workflow |
+| Short tasks or only a few small images | Extra bookkeeping may outweigh savings; measure before integrating |
+| Many small images accumulate over time | Potential benefit is unmeasured; file size alone does not determine image tokens or latency |
+| Your host already manages images or uses incremental transport | Additional benefit is unknown; compare the actual outgoing traffic, including retries |
+| You cannot change the host's final request or hidden history | This library alone cannot integrate there; installing it does not modify default Codex |
 
-## Task, lifecycle and treatment
+## Try the offline loop
 
-A task describes **why pixels are needed** (read, locate, compare, judge quality, or act). Lifecycle describes **the host-declared state** (active, completed, invalidated, pending verification, or recalled). Treatment is the component's request decision: keep the original or replace an eligible occurrence with a source-bound text reference.
-
-Completion alone is insufficient. Each occurrence must be bound to its actual request image and have a matching result receipt; current, required, uncertain, comparison and other protected evidence stays as pixels. The host checks whether recorded results are sufficient for the next task. The default path does not automatically crop, thumbnail, summarize or extract image content.
-
-Original storage is separate from request treatment. For comparison, rebuild from canonical history with updated task state. For explicit recall, verify the stored original and attach it as a new registered occurrence. A text reference is provenance data, not an image-fetch capability.
-
-This package does not infer task completion, perform OCR, call a model, or modify an installed agent's hidden history. A receipt records a host-supplied result; it does not prove that result is true or sufficient.
-
-## Quickstart
-
-Python 3.9+; no model account, API key, Rust, or Codex is needed. Install from this repository (the project is **not published on PyPI**):
+Python 3.9+, no model account, API key, Rust or Codex required. Install from source; **not published on PyPI**:
 
 ```sh
 git clone https://github.com/messsiii/image-context-manager.git
@@ -33,65 +28,89 @@ python3 -m venv .venv
 .venv/bin/icm-demo --out run-data/first
 ```
 
-On Windows use `.venv\Scripts\python.exe` and `.venv\Scripts\icm-demo.exe`. Installation may download build tools and Pillow. The demo itself runs offline and generates only synthetic images and host completion events. Use a new `--out` directory each time; existing directories are rejected.
+Installation may download build tools and Pillow. The demo runs offline with synthetic images and explicit synthetic host completion events. Choose a new output directory each time. Windows command paths are `.venv\Scripts\python.exe` and `.venv\Scripts\icm-demo.exe`; Windows execution remains unverified.
 
-Expected `report.json` image counts:
+The CLI prints a report and writes `report.json`. An excerpt:
 
 ```json
-{"initial": 3, "retired": 2, "comparison": 3, "recall": 3}
+{
+  "image_counts": {"initial": 3, "retired": 2, "comparison": 3, "recall": 3},
+  "canonical_history_preserved": true,
+  "original_recalled_byte_exact": true,
+  "bad_request_hash_rejected": true
+}
 ```
 
-The draft exits a later request after a declared completion; comparison restores it; explicit recall adds a protected new occurrence. The walkthrough also checks source/version protection, unchanged canonical history, invalid-plan rejection, persistent original storage, and corruption rejection. It writes local request copies to `requests.json`; those files are generated synthetic data, not network measurements.
+You can inspect the four generated request copies in `requests.json` and the persistent original store in `originals/`. The demo shows retirement, comparison and recall, and rejects source/version drift, bad plans and corrupt originals. These local outputs demonstrate request construction, not network savings. [Runnable Python entry point](examples/offline_demo.py) · [Full walkthrough](src/image_context_manager/demo.py).
 
-## Add it to your harness
+## From a workflow to image decisions
 
-![Responsibility boundary: the host owns history, task decisions, provider adaptation and sending; the component validates request copies and stores originals.](docs/images/boundary.en.svg)
+Consider preparing App Store Connect (ASC) assets: draft screenshots → revise copy/layout → compare candidates → check the upload screen → submit through the host's authorized workflow. **This is an illustrative scenario, not a measured ASC run or a feature of this package.**
 
-*Steps 1–3 describe request assembly. Step 4 is a separate host-initiated recall path, not an automatic operation after every send.*
+A workflow contains overlapping image subtasks: **read** text, **locate** a control, inspect **state**, judge a spatial **relation**, assess **quality**, **compare** versions, or use pixels for an **action**. A screenshot can serve several tasks at once. Finishing a text read does not finish its comparison or action task.
 
-Use `HistoricalImages` with the strict local adapter, then map the result to your provider's request format:
+For each attachment, the host records the source, version, stage, tasks and lifecycle: active, completed, invalidated, pending verification, or recalled. Lifecycle is declared state; **treatment** is what goes into this request: original pixels or an eligible source-bound reference. Re-evaluate when the next task or state changes. “Invalidated” does not mean delete the image or automatically retire it.
+
+## What happens on every turn?
+
+![Per-turn decision flow: the host stores and binds actual attachments, declares state, preserves protected evidence, replaces only eligible history, validates a request copy and sends it; later pixel needs trigger host-controlled restoration.](docs/images/decision.en.svg)
+
+1. **Register the actual input.** The host stores PNG/JPEG originals, preserves complete canonical history, registers every attachment occurrence (including duplicates), and binds its actual inline URL hash.
+2. **Declare this turn's needs.** Supply trusted task/lifecycle state, the current attachment boundary and explicit protections. Current, active, pending, recalled, uncertain or required evidence stays as pixels; so do comparison, quality, relation and action tasks when correctly declared.
+3. **Check the remaining history.** Only completed/invalidated, sufficiently confident occurrences with matching source/version/stage, bound request images and matching result receipts can retire. The host must also establish that the recorded result is sufficient for the next task. Otherwise keep the image.
+4. **Build and send a checked copy.** `HistoricalImages.plan` proposes replacements; `apply_plan` validates before changing a deep copy. Each reference includes source identity and recorded result/provenance. The host maps that copy to the provider format, checks actual outgoing images and sends it. A bad plan stops the send for repair; do not append canonical images again afterward.
+5. **Restore when the task needs pixels.** For comparison, update state and rebuild from canonical history. For explicit recall, verify the stored original's SHA-256, attach it anew and register/protect that occurrence. Neither canonical history nor the original store is deleted by retirement.
+
+A receipt records host-provided results; it is **not an automatic summary or proof of truth**. A reference is not a fetch URL: the model cannot use it to read a local file. Image text is data, not authority to change lifecycle.
+
+## Example: draft → current → compare → continue
+
+![Conceptual four-turn example: read draft A, replace eligible A with a reference while retaining current B, restore A and B for comparison, then re-evaluate before continuing.](docs/images/workflow.en.svg)
+
+This diagram illustrates request treatment, not image counts, measured speed or a fixed policy sequence. After comparison, A can become a reference again only when the host declares the comparison finished, updates its tasks/state, and all eligibility checks still pass. Pending evidence remains as pixels throughout. The offline demo above uses three synthetic images and separately demonstrates explicit recall.
+
+## Design options versus the default implementation
+
+Resolution reduction, cropping, summaries, subagents and external storage/recall are **possible context-management tools**, not a mandatory sequence. Choose according to the task and verify that evidence survives.
+
+| Technique | What this repository actually provides |
+|---|---|
+| Keep original pixels | Default protection for declared current or still-needed evidence |
+| Replace eligible history with text | Default `HistoricalImages` path using source-bound host result receipts; no automatic OCR or summarization |
+| External originals and recall | `AssetStore`, SHA-256 integrity checks and byte-exact recall; the host initiates restoration |
+| Lower resolution / crop | Earlier `RequestAssembler` / `Policy` prototype has explicit thumbnail/crop experiments with separate rules; no dynamic selection in the default path |
+| Detect tasks / delegate to subagents | Host-level design choices; no automatic task detection or subagent scheduling here |
+
+## Connect your request builder
+
+The default path uses the strict local schema `icm.integration-demo.v1`: text and inline PNG/JPEG images. Remote URLs and tool-output images are unsupported. Provider schemas need an explicit adapter. The package includes no model client and cannot stop another host from appending hidden history.
+
+After storing, registering, binding and committing checked results, the request boundary looks like this:
 
 ```python
-from image_context_manager import (
-    AssetStore, HistoricalImages, ImageUse, Lifecycle, Task,
-    inspect_images, apply_plan,
-)
+from image_context_manager import apply_plan
 
-# canonical_messages and current_states belong to your harness.
-# Register EVERY image occurrence, bind its actual inline URL hash,
-# then commit real completed-task results whose sufficiency you checked.
+# manager, canonical_messages and states are initialized by your harness.
 plan, decisions = manager.plan(
-    "turn-2", current_states, current_start=current_attachment_start,
+    "turn-2", states, current_start=current_attachment_start,
 )
 request_copy = apply_plan(canonical_messages, plan, generation="turn-2")
-# Send request_copy through YOUR adapter; do not append canonical images again.
+# Your adapter maps and sends request_copy.
 ```
 
-This fragment shows the request boundary, not a complete runnable script. See [the full offline walkthrough](src/image_context_manager/demo.py), [a runnable Python entry point](examples/offline_demo.py), and [the integration contract](docs/INTEGRATION.md) for registration, binding, completion, failure and recall.
+This fragment is not a standalone script. Follow the [integration contract](docs/INTEGRATION.md) for the complete call order, state guards, failure handling and recall.
 
-## Support and boundaries
-
-| Area | Current status |
-|---|---|
-| Original storage | Static PNG/JPEG; SHA-256 integrity and byte-exact recall |
-| Default lifecycle path | `HistoricalImages`: request-copy retirement; current, comparison, pending, required, uncertain and recalled evidence protected when correctly declared |
-| Local adapter | `icm.integration-demo.v1`, inline PNG/JPEG images and text only; remote URLs and tool-output images unsupported; other schemas need an explicit adapter |
-| Other exported prototype API | `RequestAssembler` / `Policy` use a separate replay schema and different rules; not the quickstart path |
-| Persistent state | Originals and asset metadata persist; registrations/receipts are in memory and must be rebuilt after restart |
-| Concurrency / privacy | One ordered harness; no tenant isolation, encryption, retention service or concurrent transaction management |
-| Provider integration | Your harness must control the final request, including old images; no bundled model client |
-| Default Codex desktop/CLI | Installing this package does **not** add image-history control; no supported public replacement hook is established |
-| Isolated Codex research | Optional Apache-2.0-derived debug-source patch for public tag `rust-v0.162.1`; native HTTP synthetic experiment only |
-| WebSocket | Large five-image requests reproduced close 1009 then HTTP fallback; exact threshold/layer and root cause remain unresolved |
-| Platforms | Local macOS/Python 3.9 tested; Linux/Python versions are checked by the repository CI; Windows remains unverified |
-
-There is no automatic semantic truth or lifecycle detector. The host supplies trusted state and verifies result sufficiency. Image text is data, not permission to change lifecycle. A hash reference is not a URL and does not let a model fetch a local file. Keep the original store private and manage backup, access control and deletion yourself.
+Originals and asset metadata persist; registrations/receipts remain in memory and must be rebuilt after restart. Calls must be ordered by one host; no concurrent transactions, tenant isolation, encryption or retention service is provided. The host manages private storage, metadata privacy (including EXIF), backups, permissions and deletion.
 
 ## What has been measured
 
 An earlier **synthetic seven-task workflow**, five independent A/B pairs (70 total turns), used an isolated Codex 0.162.1 **native HTTP** host. Strict checks passed 70/70. In that specific experiment, B/A ratios were 0.3095 for cumulative process socket bytes sent, 0.6881 for median turn TTFT, and 0.7291 for median complete-workflow elapsed time (69.05%, 31.19%, and 27.09% reductions respectively).
 
 These are historical experimental results, not a promise of speed-up. They are not measurements of default Codex, a real App Store workflow, other models, billing savings, or independent developer reproduction. Socket bytes include process startup/control/TLS/retries; request bytes, image tokens, latency, and cost are different quantities. No new model experiment was run for this release. [Aggregates, provenance, WS failures and measurement limits](experiments/README.md).
+
+The optional Codex research patch targets public tag `rust-v0.162.1`; it is not a supported default desktop/CLI integration. Five-image WebSocket requests reproduced close 1009 followed by HTTP fallback; the exact threshold, rejecting layer and root cause remain unresolved. This work adds no WebSocket fix. Local macOS/Python 3.9 was tested; repository CI checks Linux/Python versions.
+
+For a real integration, compare matched tasks with unchanged correctness criteria. Count all transmitted bytes, retries/fallbacks, reconstruction/recall overhead and full workflow time; check lost evidence and result quality as well as size. Small-image accumulation, existing host management and incremental transport need their own evaluation.
 
 ## Development
 
