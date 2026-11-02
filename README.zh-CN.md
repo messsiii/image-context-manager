@@ -35,7 +35,7 @@
 <img width="4" height="1" alt="">
 <a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
 <img width="4" height="1" alt="">
-<a href="README.md"><img src="docs/images/reference/badge-language.svg" height="48" alt="language"></a>
+<a href="README.md" title="English"><img src="docs/images/reference/badge-language-en.svg" height="48" alt="English"></a>
 </div>
 
 <br/>
@@ -128,6 +128,14 @@ ASC 提审把**素材制作**和**后台操作**串在同一会话里：既要�
 | 五组累计进程发送量 | 305.26 MB | 94.48 MB | 减少 69.0% |
 | 完整七轮流程耗时中位数 | 57.32 秒 | 41.79 秒 | 减少 27.1% |
 | 答案检查通过 | 35 / 35 | 35 / 35 | 本组检查均通过 |
+
+<div align="center">
+  <a href="docs/images/reference/benchmark-zh-CN.jpg">
+    <img src="docs/images/reference/benchmark-zh-CN.jpg" alt="五组七轮 Codex 会话的进程发送量与完整流程耗时 A/B 对照" width="100%">
+  </a>
+</div>
+
+每个点代表一个完整七轮会话：横轴为进程发送量（MiB），纵轴为流程耗时（秒）。数据来自上述 Codex HTTP 合成图片实验。 点击图表可查看原图并放大。
 
 单轮首个 token 等待时间的中位数减少 31.2%。流程耗时包含准备和处理，不含固定观测等待。发送量来自进程网络计数，包含启动、控制通信、TLS、重试和回退；MB 按 1,000,000 字节计算，不是图片文件大小或 token 用量。没有测得费用节省。[原始汇总](experiments/http-results.json) · [实验条件与依据](experiments/README.md)
 

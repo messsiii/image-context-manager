@@ -35,7 +35,7 @@
 <img width="4" height="1" alt="">
 <a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
 <img width="4" height="1" alt="">
-<a href="README.zh-CN.md"><img src="docs/images/reference/badge-language.svg" height="48" alt="language"></a>
+<a href="README.zh-CN.md" title="中文"><img src="docs/images/reference/badge-language-zh.svg" height="48" alt="中文"></a>
 </div>
 
 <br/>
@@ -128,6 +128,14 @@ All five independent A/B pairs, ten sessions and 70 turns completed. Failed atte
 | Cumulative process sends, all five pairs | 305.26 MB | 94.48 MB | 69.0% less |
 | Median complete seven-turn workflow | 57.32 s | 41.79 s | 27.1% less |
 | Answer checks passed | 35 / 35 | 35 / 35 | All checks passed in this set |
+
+<div align="center">
+  <a href="docs/images/reference/benchmark-en.jpg">
+    <img src="docs/images/reference/benchmark-en.jpg" alt="A/B comparison of process sends and full workflow time across five pairs of seven-turn Codex sessions" width="100%">
+  </a>
+</div>
+
+Each point is one complete seven-turn session: process sends in MiB on the horizontal axis, workflow time in seconds on the vertical axis. These are the synthetic Codex HTTP experiments described above. Click the chart to view the full-size image.
 
 Median per-turn time to first token fell by 31.2%. Workflow time includes preparation and processing, excluding fixed observation waits. Send totals are process network counters including startup, control traffic, TLS, retries and fallback. MB means 1,000,000 bytes; these are not image-file sizes or token counts. Cost savings were not measured. [Original aggregate](experiments/http-results.json) · [Setup and provenance](experiments/README.md)
 
