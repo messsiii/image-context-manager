@@ -1,36 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="840" viewBox="0 0 640 840" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840" role="img" aria-labelledby="title desc">
 <title id="title">保留证据，减少重复发送图片</title>
 <desc id="desc">生命周期示意：宿主声明任务，满足条件的旧图只在请求副本中变成引用，受保护图片继续保留，需要像素时恢复原图。</desc>
-<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.heading{font-size:28px;font-weight:700}.label{font-size:24px;font-weight:650}.body{font-size:22px}.step{font-size:23px;font-weight:700;fill:#fff}.arrow{fill:none;stroke:#708397;stroke-width:3}</style>
-<rect width="640" height="840" rx="16" fill="#f5f8fb"/>
+<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.heading{font-size:28px;font-weight:700}.label{font-size:26px;font-weight:650}.body{font-size:26px}.step{font-size:23px;font-weight:700;fill:#fff}.arrow{fill:none;stroke:#708397;stroke-width:3}</style>
+<rect width="600" height="840" rx="16" fill="#f5f8fb"/>
 <text class="heading" x="28" y="48">保留证据，减少重复发送图片</text>
-<rect x="24" y="80" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<rect x="24" y="80" width="552" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
 <circle cx="54" cy="114" r="18" fill="#315e93"/>
 <text class="step" text-anchor="middle" x="54" y="122">1</text>
 <text class="label" x="84" y="123">记录每次图片附件</text>
 <text class="body" x="44" y="159">原始字节保存在请求之外。</text>
-<text class="body" x="44" y="188">记录来源、版本、任务用途与生命周期。</text>
-<path class="arrow" d="M320 216 v18 m-6 -6 6 6 6 -6"/>
-<rect x="24" y="240" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<text class="body" x="44" y="188">记录来源、版本、用途和生命周期。</text>
+<path class="arrow" d="M300 216 v18 m-6 -6 6 6 6 -6"/>
+<rect x="24" y="240" width="552" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
 <circle cx="54" cy="274" r="18" fill="#315e93"/>
 <text class="step" text-anchor="middle" x="54" y="282">2</text>
 <text class="label" x="84" y="283">只替换符合条件的历史图片</text>
-<text class="body" x="44" y="319">宿主核验结果，并声明任务完成。</text>
-<text class="body" x="44" y="348">匹配结果记录且通过保护检查 → 文字引用。</text>
-<path class="arrow" d="M320 376 v18 m-6 -6 6 6 6 -6"/>
-<rect x="24" y="400" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<text class="body" x="44" y="319">宿主核验结果，声明任务完成。</text>
+<text class="body" x="44" y="348">匹配结果且通过保护检查 → 引用。</text>
+<path class="arrow" d="M300 376 v18 m-6 -6 6 6 6 -6"/>
+<rect x="24" y="400" width="552" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
 <circle cx="54" cy="434" r="18" fill="#736044"/>
 <text class="step" text-anchor="middle" x="54" y="442">3</text>
 <text class="label" x="84" y="443">请求中继续保留受保护图片</text>
-<text class="body" x="44" y="479">当前、待核验、不确定或明确要求的证据；</text>
-<text class="body" x="44" y="508">比较、画质、关系判断和操作任务的图片。</text>
-<path class="arrow" d="M320 536 v18 m-6 -6 6 6 6 -6"/>
-<rect x="24" y="560" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<text class="body" x="44" y="479">当前、待核验、不确定、明确要求；</text>
+<text class="body" x="44" y="508">比较、画质、关系判断与操作任务。</text>
+<path class="arrow" d="M300 536 v18 m-6 -6 6 6 6 -6"/>
+<rect x="24" y="560" width="552" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
 <circle cx="54" cy="594" r="18" fill="#315e93"/>
 <text class="step" text-anchor="middle" x="54" y="602">4</text>
 <text class="label" x="84" y="603">需要像素时恢复</text>
-<text class="body" x="44" y="639">比较：从完整原始历史重新构建请求。</text>
-<text class="body" x="44" y="668">显式召回：校验原图，作为新附件加入。</text>
+<text class="body" x="44" y="639">比较：从完整历史重新构建请求。</text>
+<text class="body" x="44" y="668">召回：校验原图，作为新附件加入。</text>
 <text class="body" x="28" y="720">流程示意，不代表实测发送量。</text>
 <text class="body" x="28" y="749">完整原始历史和外部原图保持不变。</text>
 </svg>
