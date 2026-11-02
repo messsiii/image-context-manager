@@ -1,15 +1,56 @@
 <picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-light.png">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-dark.png">
-  <img alt="Image Context Manager" src="docs/images/reference/wordmark-light.png" width="100%">
+  <img alt="Image Context Manager — original monochrome image-frame wordmark." src="docs/images/reference/wordmark-light.png" width="100%">
 </picture>
 
-[English](README.md) · [实验版 0.2.0a1](https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1) · [MIT](LICENSE)
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/tagline-zh-CN-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tagline-zh-CN-dark.svg">
+  <img alt="管理 agent 每轮使用的图片。" src="docs/images/reference/tagline-zh-CN-light.svg" width="400">
+</picture>
+</div>
 
-# 让 agent 知道怎么处理长任务中的图片
+<div align="center">
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.2.0a1, Python 3.9 or newer"></a>
+</div>
+
+---
+
+<div align="center">
+<a href="#安装"><img src="docs/images/reference/badge-install.svg" alt="Install"></a>
+<img width="16" height="1" alt="">
+<a href="#怎么用"><img src="docs/images/reference/badge-use.svg" alt="Use"></a>
+<img width="16" height="1" alt="">
+<a href="#图片到底怎么处理"><img src="docs/images/reference/badge-workflow.svg" alt="Workflow"></a>
+<img width="16" height="1" alt="">
+<a href="src/image_context_manager"><img src="docs/images/reference/badge-code.svg" alt="code"></a>
+<img width="100" height="1" alt="">
+<a href="https://github.com/messsiii/image-context-manager/actions/workflows/tests.yml"><img src="docs/images/reference/badge-tests.svg" alt="tests"></a>
+<img width="4" height="1" alt="">
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
+<img width="4" height="1" alt="">
+<a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
+<img width="4" height="1" alt="">
+<a href="README.md"><img src="docs/images/reference/badge-language.svg" height="48" alt="language"></a>
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="docs/images/reference/canyon.jpg" alt="Illustration: an image frame bridges a canyon." width="720">
+</div>
+
+<div align="center">
 
 用 Claude Code 或 Codex 操作网页、检查设计、反复调整素材时，会话里可能积累很多截图。Image Context Manager（ICM）提供两样东西：**教 agent 如何处理图片的 skill，以及实际执行处理的本地工具**。
 
 agent 可以裁剪相关区域、压缩图片、把核对后的结论存成文字，也可以让独立的看图子 agent 处理图片。原图始终保留，需要复查时再取回。
+
+</div>
+
+# 快速开始
 
 ## 安装
 
@@ -41,6 +82,10 @@ python3 -m venv .venv
 4. 结论核对无误、足够支持后续工作后，agent 可以复用文字。你要求重新比较版本时，再取回原图。
 
 开始使用 skill，不需要先选 Python 接入方式，也不需要先跑离线示例。agent 会调用配套工具。
+
+![离线合成图片 Python 示例：图片数从 3 到 2，比较和召回时恢复为 3。不是 agent 会话录屏。](docs/images/reference/demo-zh-CN.gif)
+
+**本地机制示意：** 动画回放的是合成图片的 Python 请求文件，用来说明替换与召回；不代表 Claude Code / Codex 的提速或历史删除效果。
 
 ## 图片到底怎么处理
 
@@ -74,3 +119,13 @@ flowchart TD
 手动命令、更新和卸载方法放在[工具参考](docs/AGENT-SETUP.zh-CN.md)。开发者测试命令见[参与贡献](CONTRIBUTING.zh-CN.md)；以前的合成图片 HTTP 测试记录放在[实验目录](experiments/README.md)。
 
 [版本记录](CHANGELOG.md) · [许可与上游说明](NOTICE) · [配图来源](docs/images/reference/ATTRIBUTION.md)
+
+<br/>
+
+<div align="center">
+<img src="docs/images/reference/studio.jpg" alt="AI-generated office illustration; not a real project office." width="400">
+
+[![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
+&emsp;
+[![License](docs/images/reference/footer-license.svg)](LICENSE)
+</div>
