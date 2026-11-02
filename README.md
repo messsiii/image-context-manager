@@ -7,15 +7,17 @@ An agent may keep sending screenshots from tasks it has already finished. A newe
 
 Image Context Manager lets your harness keep originals outside the request, track each attachment's source/version/task, and replace eligible completed-task images with source-bound text references. When the task needs pixels again, your harness restores them from canonical history or explicitly recalls the byte-exact original.
 
-```text
-canonical history + trusted task state
-                  ↓
-         source-bound retirement plan
-                  ↓
-       validate and transform a COPY → your provider adapter → send
-                  ↑
-       original store for later recall
-```
+![Image lifecycle: track attachments, retire eligible history, protect needed evidence, and restore originals.](docs/images/lifecycle.en.svg)
+
+*Conceptual lifecycle for the default `HistoricalImages` path. Retirement changes a request copy; it does not delete canonical history or stored originals.*
+
+## Task, lifecycle and treatment
+
+A task describes **why pixels are needed** (read, locate, compare, judge quality, or act). Lifecycle describes **the host-declared state** (active, completed, invalidated, pending verification, or recalled). Treatment is the component's request decision: keep the original or replace an eligible occurrence with a source-bound text reference.
+
+Completion alone is insufficient. Each occurrence must be bound to its actual request image and have a matching result receipt; current, required, uncertain, comparison and other protected evidence stays as pixels. The host checks whether recorded results are sufficient for the next task. The default path does not automatically crop, thumbnail, summarize or extract image content.
+
+Original storage is separate from request treatment. For comparison, rebuild from canonical history with updated task state. For explicit recall, verify the stored original and attach it as a new registered occurrence. A text reference is provenance data, not an image-fetch capability.
 
 This package does not infer task completion, perform OCR, call a model, or modify an installed agent's hidden history. A receipt records a host-supplied result; it does not prove that result is true or sufficient.
 
@@ -43,6 +45,10 @@ The draft exits a later request after a declared completion; comparison restores
 
 ## Add it to your harness
 
+![Responsibility boundary: the host owns history, task decisions, provider adaptation and sending; the component validates request copies and stores originals.](docs/images/boundary.en.svg)
+
+*Steps 1–3 describe request assembly. Step 4 is a separate host-initiated recall path, not an automatic operation after every send.*
+
 Use `HistoricalImages` with the strict local adapter, then map the result to your provider's request format:
 
 ```python
@@ -69,7 +75,7 @@ This fragment shows the request boundary, not a complete runnable script. See [t
 |---|---|
 | Original storage | Static PNG/JPEG; SHA-256 integrity and byte-exact recall |
 | Default lifecycle path | `HistoricalImages`: request-copy retirement; current, comparison, pending, required, uncertain and recalled evidence protected when correctly declared |
-| Local adapter | `icm.integration-demo.v1`, inline images and text only; other schemas need an explicit adapter |
+| Local adapter | `icm.integration-demo.v1`, inline PNG/JPEG images and text only; remote URLs and tool-output images unsupported; other schemas need an explicit adapter |
 | Other exported prototype API | `RequestAssembler` / `Policy` use a separate replay schema and different rules; not the quickstart path |
 | Persistent state | Originals and asset metadata persist; registrations/receipts are in memory and must be rebuilt after restart |
 | Concurrency / privacy | One ordered harness; no tenant isolation, encryption, retention service or concurrent transaction management |

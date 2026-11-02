@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="840" viewBox="0 0 640 840" role="img" aria-labelledby="title desc">
+<title id="title">最终请求由你的宿主控制</title>
+<desc id="desc">职责示意：宿主管理历史和可信结果，组件生成并校验请求副本，宿主适配并发送；原图召回由宿主发起。</desc>
+<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.heading{font-size:28px;font-weight:700}.label{font-size:24px;font-weight:650}.body{font-size:22px}.step{font-size:23px;font-weight:700;fill:#fff}.arrow{fill:none;stroke:#708397;stroke-width:3}</style>
+<rect width="640" height="840" rx="16" fill="#f5f8fb"/>
+<text class="heading" x="28" y="48">最终请求由你的宿主控制</text>
+<rect x="24" y="80" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<circle cx="54" cy="114" r="18" fill="#736044"/>
+<text class="step" text-anchor="middle" x="54" y="122">1</text>
+<text class="label" x="84" y="123">宿主 · 历史与任务决策</text>
+<text class="body" x="44" y="159">保存完整原始历史，登记每次附件。</text>
+<text class="body" x="44" y="188">绑定实际图片，提交已核验的任务结果。</text>
+<path class="arrow" d="M320 216 v18 m-6 -6 6 6 6 -6"/>
+<rect x="24" y="240" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<circle cx="54" cy="274" r="18" fill="#315e93"/>
+<text class="step" text-anchor="middle" x="54" y="282">2</text>
+<text class="label" x="84" y="283">组件 · 生成计划与校验</text>
+<text class="body" x="44" y="319">HistoricalImages 规划合适的替换。</text>
+<text class="body" x="44" y="348">apply_plan 校验后变换请求副本。</text>
+<path class="arrow" d="M320 376 v18 m-6 -6 6 6 6 -6"/>
+<rect x="24" y="400" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<circle cx="54" cy="434" r="18" fill="#736044"/>
+<text class="step" text-anchor="middle" x="54" y="442">3</text>
+<text class="label" x="84" y="443">宿主 · 适配与发送</text>
+<text class="body" x="44" y="479">将副本映射为模型提供方的请求格式。</text>
+<text class="body" x="44" y="508">检查实际发送的图片，再调用模型。</text>
+
+<rect x="24" y="560" width="592" height="132" rx="12" fill="#fff" stroke="#cbd6e1"/>
+<circle cx="54" cy="594" r="18" fill="#315e93"/>
+<text class="step" text-anchor="middle" x="54" y="602">4</text>
+<text class="label" x="84" y="603">宿主与存储 · 显式召回</text>
+<text class="body" x="44" y="639">AssetStore 保存 PNG/JPEG 原图和哈希。</text>
+<text class="body" x="44" y="668">宿主发起召回，并将原图登记为新附件。</text>
+<text class="body" x="28" y="720">不自动执行 OCR、摘要或裁剪选择。</text>
+<text class="body" x="28" y="749">未接通默认 Codex；未适配工具输出图片。</text>
+</svg>
