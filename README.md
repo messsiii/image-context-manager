@@ -81,24 +81,16 @@ For example, while preparing App Store screenshots:
 3. A visual worker can inspect the images in its own conversation and return findings as text.
 4. After the findings are checked and sufficient, the agent can reuse that text for later steps. If you ask to compare versions again, it retrieves the originals.
 
-You do not need to choose a Python integration or run an offline demo to start using the skill. The agent calls the bundled tools.
-
-![Offline synthetic Python demo: image count changes 3 to 2, then back to 3 for comparison and recall. Not a recorded agent session.](docs/images/reference/demo-en.gif)
-
-**Local mechanism demo:** this animation replays saved synthetic Python request files. It illustrates replacement and recall; it does not demonstrate Claude Code / Codex speed or history removal.
-
 ## How it chooses what to keep
 
-```mermaid
-flowchart TD
-  A[Use text when sufficient] --> B[Otherwise save the original]
-  B --> C[Choose original, crop or compression]
-  C --> D[Agent or visual worker inspects]
-  D --> E[Save checked findings as text]
-  E --> F[Retrieve original for later checks]
-```
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-en-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="docs/images/reference/tool-workflow-en-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-en-dark.svg">
+  <img alt="Image workflow: identify the task, prepare an image, inspect it, save findings and recall originals." src="docs/images/reference/tool-workflow-en-light.svg" width="720">
+</picture>
 
-There is no fixed “compress everything” rule. A small image may stay unchanged. Reading and summarizing are done by your existing agent; crop regions must be identified and checked by the agent. The tools handle the files, preserve originals, and associate findings with the correct source and version. A visual worker requires native subagent support in your agent.
+Not every image needs compression. Use a crop or a smaller image when the task allows; keep the original for layout comparisons, visual quality checks or uncertain details. Reuse text only after the findings are checked and sufficient, and retrieve the original when another check is needed. Claude Code or Codex launches the optional visual worker; ICM prepares its handoff files.
 
 ## What works today — and what does not
 

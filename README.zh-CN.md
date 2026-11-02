@@ -81,24 +81,16 @@ python3 -m venv .venv
 3. 看图子 agent 可以在自己的会话里处理图片，再把文字结论交回来。
 4. 结论核对无误、足够支持后续工作后，agent 可以复用文字。你要求重新比较版本时，再取回原图。
 
-开始使用 skill，不需要先选 Python 接入方式，也不需要先跑离线示例。agent 会调用配套工具。
-
-![离线合成图片 Python 示例：图片数从 3 到 2，比较和召回时恢复为 3。不是 agent 会话录屏。](docs/images/reference/demo-zh-CN.gif)
-
-**本地机制示意：** 动画回放的是合成图片的 Python 请求文件，用来说明替换与召回；不代表 Claude Code / Codex 的提速或历史删除效果。
-
 ## 图片到底怎么处理
 
-```mermaid
-flowchart TD
-  A[文字够用就先读文字] --> B[需要看图时保存原图]
-  B[需要看图时保存原图] --> C[按需选择原图、裁剪或压缩]
-  C[按需选择原图、裁剪或压缩] --> D[agent 或看图子 agent 检查]
-  D[agent 或看图子 agent 检查] --> E[保存核对后的文字结论]
-  E[保存核对后的文字结论] --> F[需要复查时再取回原图]
-```
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-zh-CN-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="docs/images/reference/tool-workflow-zh-CN-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-zh-CN-dark.svg">
+  <img alt="图片处理流程：判断用途、准备图片、看图核对、保存结论，并按需取回原图。" src="docs/images/reference/tool-workflow-zh-CN-light.svg" width="720">
+</picture>
 
-不是所有图片来了就压缩，小图也可以保持原样。识字和总结由现有 agent 完成，裁剪区域也需要 agent 先确定并核对。工具负责处理文件、保留原图，并把结论对应到正确的来源和版本。看图子 agent 需要你使用的 agent 支持原生子 agent。
+不是每张图都要压缩。任务允许时用局部图或压缩图；比较排版、判断视觉质量或细节存疑时，保留原图。结论核对无误、足够使用后，再复用文字；需要复查时取回原图。可选的看图子 agent 由 Claude Code 或 Codex 启动，ICM 负责准备交接文件。
 
 ## 现在能做什么，有哪些限制
 
