@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="204" viewBox="0 0 800 204" role="img" aria-labelledby="title desc">
+<title id="title">Image Context Manager</title>
+<desc id="desc">Original project wordmark: an image frame and a source-bound text reference.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#141b26}.muted{fill:#617085}.label{font-weight:700}.blue{fill:#315ee8}</style>
+<rect x="24" y="33" width="112" height="112" rx="12" fill="none" stroke="#d4dce8"/>
+<rect x="33" y="25" width="112" height="112" rx="12" fill="none" stroke="#d4dce8"/>
+<rect x="42" y="17" width="112" height="112" rx="12" fill="#edf2ff" stroke="#315ee8"/>
+<path d="M57 103 81 76 98 92 118 65 141 103Z" fill="#315ee8"/>
+<circle cx="73" cy="47" r="8" fill="#315ee8"/>
+<rect x="86" y="113" width="82" height="34" rx="7" fill="#ffffff" stroke="#315ee8"/>
+<path d="M98 125 h20 m-20 10 h54 m-22 -10 h22" fill="none" stroke="#315ee8" stroke-width="3"/>
+<g font-weight="750" letter-spacing="-3">
+<text x="198" y="90" font-size="90" class="" text-anchor="start">image context</text>
+<text x="198" y="180" font-size="90" class="" text-anchor="start">manager</text>
+</g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="330" viewBox="0 0 420 330" role="img" aria-labelledby="title desc">
+<title id="title">Host → Image Context Manager → provider adapter</title>
+<desc id="desc">The host owns canonical history and trusted task state; the component checks a request copy; the host adapter checks and sends. No automatic task recognition or provider call is implied.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#141b26}.muted{fill:#617085}.label{font-weight:700}.blue{fill:#315ee8}</style>
+<rect x="10" y="8" width="400" height="81" rx="10" fill="#f5f7fb" stroke="#d4dce8"/>
+<text x="30" y="40" font-size="24" class="label" text-anchor="start">你的宿主</text>
+<text x="30" y="68" font-size="22" class="muted" text-anchor="start">完整历史 + 可信任务状态</text>
+<path d="M210 93 v12 m-5 -5 5 5 5 -5" fill="none" stroke="#617085" stroke-width="2"/>
+<rect x="10" y="109" width="400" height="81" rx="10" fill="#edf2ff" stroke="#d4dce8"/>
+<text x="30" y="141" font-size="24" class="label" text-anchor="start">Image Context Manager</text>
+<text x="30" y="169" font-size="22" class="muted" text-anchor="start">保留像素，或使用引用</text>
+<path d="M210 194 v12 m-5 -5 5 5 5 -5" fill="none" stroke="#617085" stroke-width="2"/>
+<rect x="10" y="210" width="400" height="81" rx="10" fill="#f5f7fb" stroke="#d4dce8"/>
+<text x="30" y="242" font-size="24" class="label" text-anchor="start">你的模型适配器</text>
+<text x="30" y="270" font-size="22" class="muted" text-anchor="start">检查并发送请求副本</text>
+</svg>

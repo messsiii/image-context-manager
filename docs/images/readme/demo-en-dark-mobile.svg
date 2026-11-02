@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="628" viewBox="0 0 420 628" role="img" aria-labelledby="title desc">
+<title id="title">Offline demo · illustrated request contents</title>
+<desc id="desc">Synthetic offline demo: all three images are replayed on the left/before. After eligible draft retirement the request has a draft reference and two protected images; originals stay stored.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#f1f5fc}.muted{fill:#a9b8cd}.label{font-weight:700}.blue{fill:#87a9ff}</style>
+<rect x="0" y="0" width="420" height="628" rx="16" fill="#101720" stroke="none"/>
+<text x="22" y="30" font-size="19" class="muted" text-anchor="start">Offline demo · illustrated request contents</text>
+<rect x="16" y="48" width="388" height="224" rx="12" fill="#192330" stroke="#39485d"/>
+<text x="36" y="82" font-size="26" class="label" text-anchor="start">Replay everything</text>
+<text x="36" y="109" font-size="20" class="muted" text-anchor="start">3 image attachments</text>
+<rect x="36" y="127" width="102" height="70" rx="6" fill="#253140" stroke="#39485d"/>
+<circle cx="54" cy="146" r="5" fill="#a9b8cd"/>
+<path d="M48 181 l22.44 -19.6 16.32 11.200000000000001 25.5 -26.6 20.400000000000002 35.0Z" fill="#a9b8cd" opacity=".38"/>
+<text x="36" y="221" font-size="21" class="label" text-anchor="start">Draft</text>
+<text x="36" y="247" font-size="18" class="muted" text-anchor="start">Read complete</text>
+<rect x="154" y="127" width="102" height="70" rx="6" fill="#253140" stroke="#39485d"/>
+<circle cx="172" cy="146" r="5" fill="#87a9ff"/>
+<path d="M166 181 l22.44 -19.6 16.32 11.200000000000001 25.5 -26.6 20.400000000000002 35.0Z" fill="#87a9ff" opacity=".38"/>
+<text x="154" y="221" font-size="21" class="label" text-anchor="start">Candidate</text>
+<text x="154" y="247" font-size="18" class="muted" text-anchor="start">Compare</text>
+<rect x="272" y="127" width="102" height="70" rx="6" fill="#253140" stroke="#39485d"/>
+<circle cx="290" cy="146" r="5" fill="#a9b8cd"/>
+<path d="M284 181 l22.44 -19.6 16.32 11.200000000000001 25.5 -26.6 20.400000000000002 35.0Z" fill="#a9b8cd" opacity=".38"/>
+<text x="272" y="221" font-size="21" class="label" text-anchor="start">Pending</text>
+<text x="272" y="247" font-size="18" class="muted" text-anchor="start">To verify</text>
+<rect x="16" y="290" width="388" height="224" rx="12" fill="#192330" stroke="#39485d"/>
+<text x="36" y="324" font-size="26" class="label" text-anchor="start">Keep what is needed</text>
+<text x="36" y="351" font-size="20" class="muted" text-anchor="start">2 images + 1 reference</text>
+<rect x="36" y="368" width="348" height="38" rx="7" fill="#233451" stroke="none"/>
+<text x="48" y="394" font-size="20" class="blue" text-anchor="start">Draft · source + checked result</text>
+<rect x="36" y="420" width="102" height="44" rx="6" fill="#253140" stroke="#39485d"/>
+<circle cx="54" cy="439" r="5" fill="#87a9ff"/>
+<path d="M48 448 l22.44 -12.32 16.32 7.04 25.5 -16.72 20.400000000000002 22.0Z" fill="#87a9ff" opacity=".38"/>
+<text x="36" y="490" font-size="21" class="label" text-anchor="start">Candidate</text>
+<rect x="156" y="420" width="102" height="44" rx="6" fill="#253140" stroke="#39485d"/>
+<circle cx="174" cy="439" r="5" fill="#a9b8cd"/>
+<path d="M168 448 l22.44 -12.32 16.32 7.04 25.5 -16.72 20.400000000000002 22.0Z" fill="#a9b8cd" opacity=".38"/>
+<text x="156" y="490" font-size="21" class="label" text-anchor="start">Pending</text>
+<rect x="18" y="538" width="384" height="72" rx="10" fill="#192330" stroke="#39485d"/>
+<rect x="34" y="557.0" width="30" height="31" rx="3" fill="none" stroke="#87a9ff"/>
+<rect x="40" y="554.6" width="30" height="31" rx="3" fill="none" stroke="#87a9ff"/>
+<rect x="46" y="552.2" width="30" height="31" rx="3" fill="none" stroke="#87a9ff"/>
+<text x="90" y="565" font-size="20" class="label" text-anchor="start">Originals stay stored</text>
+<text x="90" y="589" font-size="19" class="muted" text-anchor="start">Restore for comparison or recall</text>
+</svg>
