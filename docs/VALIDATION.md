@@ -4,10 +4,11 @@
 
 | Check / 检查 | Result / 结果 |
 |---|---|
-| Clean Python 3.9.6 environment, installed wheel, Pillow 11.3.0 | 27/27 tests passed with runtime network/process calls blocked / 禁止运行时网络与子进程后，27 项测试通过 |
+| Clean Python 3.9.6 environment, installed wheel, Pillow 11.3.0 | 29/29 tests passed with runtime network/process calls blocked / 禁止运行时网络与子进程后，29 项测试通过 |
 | Compression and cropping / 压缩与裁剪 | Output bytes checked; no larger compressed replacement; native crop pixels, alpha and coordinate mapping checked / 检查实际字节、不增大替换文件、原始裁剪像素、透明度和坐标映射 |
 | Persistence and recall / 保存与召回 | Reopen registry; exact original-byte recall; corruption, stale results and conflicts checked / 重启读取、原图字节一致、损坏及过期结果与冲突保护通过 |
 | Installation / 安装 | Both host layouts, packaged templates, overwrite refusal, wrapper execution and paths with spaces checked / 两种目录、打包资源、拒绝覆盖、脚本运行和含空格路径通过 |
+| Audit regression checks / 审计问题回归 | Independent pending handoff files; non-object result JSON returns a structured error without changing state / 多个待处理视觉任务使用独立交接文件；非对象结果 JSON 返回结构化错误且不改变状态 |
 | Skill validation / skill 检查 | skill-creator quick validator passed / 格式验证通过 |
 | Codex 0.162.1 functional session / 功能会话 | Installed skill discovered; wrapper invoked; native `icm-visual-worker` spawned; synthetic title read as `ICM TEST 4729`; source-bound result saved; completed `prepare` returned text; recalled SHA-256 matched / 安装发现、工具调用、原生子 agent 看合成图、文字结果保存、完成后返回文字、原图哈希一致，链路通过 |
 | Claude Code 2.1.294 actual session / 实际会话 | **Unverified**: local account could not receive replies; installation and file operations passed separately / **未验证**：当前本地账号无法接收回复；安装和文件操作已单独通过 |

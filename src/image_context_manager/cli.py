@@ -1,6 +1,7 @@
 """JSON CLI for local agents."""
 import argparse
 import json
+import uuid
 from pathlib import Path
 from .agent import Workspace, install
 from .core import Task, Lifecycle
@@ -65,7 +66,9 @@ def main(argv=None):
                         images.append(dict(item, original=ws.prepare(item, 'original')['path']))
                     output = dict(goal=args.goal, images=images,
                         instruction='Invoke icm-visual-worker using the host native subagent tool. Return text only. This command does not start an agent.')
-                    path = ws.root / 'handoff.json'
+                    handoffs = ws.root / 'handoffs'
+                    handoffs.mkdir(exist_ok=True)
+                    path = handoffs / (uuid.uuid4().hex + '.json')
                     from .core import AssetStore
                     AssetStore._atomic(path, json.dumps(output, ensure_ascii=False).encode())
                     output = dict(handoff=str(path), **output)

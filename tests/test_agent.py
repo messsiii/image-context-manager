@@ -107,3 +107,31 @@ class AgentToolsTests(unittest.TestCase):
             self.assertEqual(main(['--workspace', str(self.ws.root), 'state', 'draft', 'active', '--task', 'compare_changes']), 0)
         with self.ws.transaction() as state:
             self.assertIsNone(state['draft']['result'])
+
+    def test_pending_handoffs_remain_independent(self):
+        outputs = []
+        for goal in ['Read title', 'Check status']:
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(main(['--workspace', str(self.ws.root), 'delegate',
+                                       'draft', '--goal', goal]), 0)
+            outputs.append(json.loads(buf.getvalue()))
+        self.assertNotEqual(outputs[0]['handoff'], outputs[1]['handoff'])
+        for output in outputs:
+            saved = json.loads(Path(output['handoff']).read_text())
+            self.assertEqual(saved['goal'], output['goal'])
+            self.assertEqual(saved['images'], output['images'])
+
+    def test_record_rejects_nonobject_json_without_state_changes(self):
+        before = (self.ws.root / 'state.json').read_bytes()
+        result_file = self.root / 'result.json'
+        for value in [[], None, 'text', 42, True]:
+            with self.subTest(value=value):
+                result_file.write_text(json.dumps(value))
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf):
+                    code = main(['--workspace', str(self.ws.root), 'record',
+                                 'draft', '--file', str(result_file)])
+                self.assertEqual(code, 2)
+                self.assertIn('JSON object', json.loads(buf.getvalue())['error'])
+                self.assertEqual((self.ws.root / 'state.json').read_bytes(), before)

@@ -46,6 +46,8 @@ class Workspace:
         return state[key]
 
     def record(self, state, key, result):
+        if not isinstance(result, dict):
+            raise ValueError('Result must be a JSON object')
         item = state[key]
         for field in ('id', 'source_sha256', 'version', 'stage'):
             if result.get(field) != item[field]:
