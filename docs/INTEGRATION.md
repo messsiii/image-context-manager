@@ -1,4 +1,4 @@
-# Integration requirements
+# Python integration requirements
 
 > **Claude Code / Codex users:** the new [skill and local tools](AGENT-SETUP.md) provide compression, cropping, result storage, recall and native-worker handoffs. Request assembly below applies to Python applications that own their outgoing requests.
 

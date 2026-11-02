@@ -46,7 +46,7 @@
 
 <div align="center">
 
-帮助 agent 管理每轮发送的图片。运行[离线示例](#路径-1离线示例)，查看处理前后的请求，或接入自己的 [Python agent 程序](docs/INTEGRATION.zh-CN.md)。原图单独保存，由你的程序决定最终发送什么。
+为 Claude Code 和 Codex 提供图片处理 skill 与本地工具：按任务选择压缩、裁剪、文字结果或原图，也可交给子 agent 看图，只回传文字。[安装与使用 →](docs/AGENT-SETUP.zh-CN.md)
 
 </div>
 
@@ -54,7 +54,7 @@
 
 # 让图片跟着任务走。
 
-草稿看完后，可以用已有结论替代旧图；还要比较或核对的图片继续保留，需要时再取回原图。
+先看这一步需要什么：只需局部就裁剪，允许损失细节时才压缩，完成并核对后保存文字结果。需要比较或复核时继续用原图。skill 管理后续输入，不能擦除宿主已有的历史图片；下面的动画演示的是独立 Python 请求处理。
 
 ![离线合成示例回放：实际本地请求文件从3张图片变为2张，再为比较与取回原图恢复到3张。不是模型或ASC会话。](docs/images/reference/demo-zh-CN.gif)
 
@@ -63,6 +63,19 @@
 <br/>
 
 > **供 AI agent 与爬虫阅读：** 使用 [Claude Code / Codex 安装指南](docs/AGENT-SETUP.zh-CN.md)安装 skill、本地工具和看图子 agent。能够控制完整请求的程序还可使用 [Python 接入](docs/INTEGRATION.zh-CN.md)。skill 不会清除宿主已存在的历史图片，真实会话的净收益仍需验证。
+
+# 当前能做什么
+
+| 能力 | 如何完成 |
+|---|---|
+| 选择处理方式 | skill 指导 agent 按任务用途、当前阶段和核验情况选择，不固定套用压缩顺序 |
+| 压缩与裁剪 | 本地工具执行缩放 / JPEG 压缩，或裁剪已核对的区域；原图保留 |
+| 保存文字结果 | 现有 agent 识字、总结和核对，工具将结果与原图、版本、阶段对应保存 |
+| 子 agent 看图 | 生成交接文件，由宿主调用独立看图子 agent，主会话只接收文字 |
+| 存储与召回 | 跨重启保存图片和结果，取回原图时检查哈希一致 |
+| 处理历史请求 | 仅在你的程序控制完整请求时，通过 Python 库替换满足条件的旧图 |
+
+**验证状态：** 27 项测试通过，Python 3.9 / 3.12 CI 通过；Codex 子 agent 看图、文字结果复用和原图召回链路已实测。Claude Code 实际会话因账号状态未验证，真实多轮净收益仍未通过验收。[本版验证记录](docs/VALIDATION.md)
 
 # 我需要哪种 Image Context Manager 接入方式？
 
@@ -84,14 +97,14 @@ Claude Code / Codex 用户先看[安装 skill 和工具](docs/AGENT-SETUP.zh-CN.
 ## Claude Code / Codex：安装 skill 和工具
 
 ```sh
+git clone https://github.com/messsiii/image-context-manager.git
+cd image-context-manager
 python3 -m venv .venv
 .venv/bin/python -m pip install .
 .venv/bin/icm install --agent both --project /absolute/path/to/your-project
 ```
 
 [在克隆的仓库内运行，安装后开新会话。完整流程、处理策略及命令 →](docs/AGENT-SETUP.zh-CN.md)
-
-
 
 ## 路径 1：离线示例
 
@@ -181,9 +194,9 @@ ICM 会检查任务结果的格式及其对应的原图，但不能判断结果�
 
 <br/>
 
-# 将 Image Context Manager 接入你的 agent
+# Python 接入：在请求副本中处理历史图片
 
-由本仓库维护，适用于能决定最终向模型发送哪些内容的 agent 程序。
+以下是能控制完整请求的 Python 程序的额外接入方式。Claude Code / Codex 的 skill 和本地工具使用方式见[安装指南](docs/AGENT-SETUP.zh-CN.md)。
 
 你的程序提供对话中的全部图片及已确认的使用状态。ICM 在一份请求副本上处理旧图，不改动原始对话。原图会保留，方便比较或重新取回；取回时用 SHA-256 校验，确认文件与原图完全一致。最终的格式检查和发送仍由你的程序负责。
 
@@ -194,7 +207,7 @@ ICM 会检查任务结果的格式及其对应的原图，但不能判断结果�
   <img alt="你的 agent 提供对话历史和已确认的任务状态。ICM 检查请求副本并保存原图，最终由你的程序发送。" src="docs/images/reference/architecture-zh-CN-light.svg" width="100%">
 </picture>
 
-当前示例格式支持文字，以及直接放在请求中的 PNG/JPEG 图片。暂不处理远程图片链接或模型工具返回的图片，也不会自动识别图片文字或接入默认 Codex。以下片段需要先在你的 agent 程序中完成图片登记，所需信息见[接入要求](docs/INTEGRATION.zh-CN.md)。
+这个 Python 示例格式支持文字，以及直接放在请求中的 PNG/JPEG 图片；不支持远程图片链接或工具返回的图片。它不自动识字，也不是默认 Codex 历史的改写接口。以下片段需要先在你的 agent 程序中完成图片登记，所需信息见[接入要求](docs/INTEGRATION.zh-CN.md)。
 
 ```python
 from image_context_manager import apply_plan, inspect_images
@@ -288,7 +301,7 @@ Claude Code 和 Codex 可安装 skill 使用本地工具，其他 agent 也可�
 <details>
 <summary><b>如何投入生产使用？</b></summary>
 
-先跑离线示例，再按接入要求接到独立测试用的 agent 程序，检查实际发送内容、失败重试、取回原图和任务结果是否正确。默认 Codex 接入、其他任务是否受益，以及通过 WebSocket 替换历史图片的稳定性，尚未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的-agent-适合接入吗)。
+先跑离线示例，再按接入要求接到独立测试用的 agent 程序，检查实际发送内容、失败重试、取回原图和任务结果是否正确。Codex skill 的小规模功能链路已通过；默认宿主的完整历史替换、真实任务净收益，以及通过 WebSocket 替换历史图片的稳定性仍未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的-agent-适合接入吗)。
 
 </details>
 
@@ -305,6 +318,10 @@ Claude Code 和 Codex 可安装 skill 使用本地工具，其他 agent 也可�
 
 | 组件 | 用途 |
 | --- | --- |
+| [skill 与安装指南](docs/AGENT-SETUP.zh-CN.md) | 为 Claude Code / Codex 安装处理规则和原生看图子 agent。 |
+| [本地图片工具](src/image_context_manager/cli.py) | `icm` 命令执行压缩、裁剪、文字结果保存、交接与召回。 |
+| [持久化工作目录](src/image_context_manager/agent.py) | 跨重启保存原图与结果，校验来源和版本。 |
+| [验证记录](docs/VALIDATION.md) | 查看已通过检查和仍未验证的能力。 |
 | [HistoricalImages](src/image_context_manager/history.py) | 记录图片用途和状态，决定本轮保留哪些图片。 |
 | [AssetStore](src/image_context_manager/core.py) | 保存原图，取回时检查文件是否完全一致。 |
 | [离线示例](src/image_context_manager/demo.py) | 用合成图片演示替换、比较和取回原图。 |
@@ -314,6 +331,8 @@ Claude Code 和 Codex 可安装 skill 使用本地工具，其他 agent 也可�
 | [传输诊断](experiments/websocket-diagnostics/README.md) | 连接测试记录，以及尚未解决的 WebSocket 大消息断开问题。 |
 
 <br/>
+
+[参与贡献](CONTRIBUTING.zh-CN.md)
 
 ## 引用
 

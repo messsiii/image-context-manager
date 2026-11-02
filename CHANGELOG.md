@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Update bilingual project descriptions, capability summaries, setup links and contribution guidance to reflect the skill and local tools.
+- Separate persistent skill workspaces from in-memory Python request state, and functional checks from performance evidence.
+
 ## 0.2.0a1 — local agent tools and installable skill
 
 - Add `icm` commands for persistent task-scoped image storage, actual resize/JPEG compression, verified native-pixel crops, source-bound text results, original recall and worker handoffs.

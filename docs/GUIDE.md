@@ -18,7 +18,7 @@ Long agent sessions can repeatedly send screenshots from tasks that are already 
 | Short tasks or only a few small images | Tracking images may cost more than it saves; measure before integrating |
 | Many small images accumulate over time | Benefits have not been measured; smaller files do not necessarily mean fewer image tokens or faster responses |
 | Your agent already manages images or sends only new content each turn | Additional benefit is unknown; compare the actual outgoing traffic, including retries |
-| You cannot control all content sent by your agent, including history it adds internally | This library alone cannot integrate there; installing it does not modify default Codex |
+| You cannot control all content sent by your agent, including history it adds internally | Use the skill and local tools for future input; full history replacement still requires request control |
 
 ## Run the offline demo
 
@@ -104,13 +104,13 @@ request_copy = apply_plan(canonical_messages, plan, generation="turn-2")
 
 This snippet is not a standalone script. See the [integration requirements](INTEGRATION.md) for the full call order, image protection, error handling and retrieving originals.
 
-Originals and image information are saved to disk. Attachment registrations and task results are only in memory and must be rebuilt after restart. One program must call the library in order; it does not coordinate simultaneous callers, isolate users, encrypt stored files or manage automatic expiry. Your program manages private storage, file information privacy (including EXIF), backups, access and deletion.
+The Python request integration here uses `HistoricalImages`: originals and image information are saved to disk, but attachment registrations and task results are only in memory and must be rebuilt after restart. One program must call it in order. The skill uses `Workspace`, which saves registrations and results to disk and rejects simultaneous writes. Neither approach isolates users, encrypts stored files or manages automatic expiry. Your program manages private storage, file information privacy (including EXIF), backups, access and deletion.
 
 ## Existing performance tests
 
 An earlier **seven-task workflow using synthetic images** ran five independent A/B pairs (70 turns) in a separate Codex 0.162.1 test program using **native HTTP**. Strict checks passed 70/70. Optimized / original ratios were 0.3095 for total network bytes sent by the process, 0.6881 for median time to first output per turn (TTFT), and 0.7291 for median full-workflow time (E2E). These correspond to reductions of 69.05%, 31.19% and 27.09% in that experiment.
 
-These are earlier results, not a speed guarantee. They do not measure default Codex, a real App Store workflow, other models, billing savings or independent developer reproduction. Network totals include process startup, control messages, encrypted connections (TLS), retries and fallback connections. Request size, image tokens, response time and cost are different measures. No new model experiment was run for this release. [Combined results, sources, WebSocket failures and test limits](../experiments/README.md).
+These are earlier results, not a speed guarantee. They do not measure real-task performance in default Codex, a real App Store workflow, other models, billing savings or independent developer reproduction. Network totals include process startup, control messages, encrypted connections (TLS), retries and fallback connections. Request size, image tokens, response time and cost are different measures. This release added a small Codex functional check, not a new complete multi-turn performance experiment; see [validation](VALIDATION.md). [Combined results, sources, WebSocket failures and test limits](../experiments/README.md).
 
 The optional Codex research changes target public tag `rust-v0.162.1`; they are not a supported integration for default Codex desktop or CLI. Requests containing five images repeatedly caused WebSocket to disconnect with code 1009 (message too large), then switch to HTTP. The exact size limit, where rejection occurs and its root cause remain unknown; no WebSocket fix is included. Local macOS/Python 3.9 was tested; automated repository checks (CI) cover Linux/Python versions.
 
@@ -122,11 +122,12 @@ For a real integration, compare the same tasks with the same correctness criteri
 python -m pip install .
 python -m unittest discover -s tests -v
 python examples/offline_demo.py --out run-data/python-example
+python examples/agent_tools.py --out run-data/agent-tools-example
 ```
 
 `python -I tools/verify_install.py --tests tests --out run-data/verify` additionally checks the venv-installed package and runs the demo/tests while Python audit hooks reject network connections, domain-name lookups (DNS) and starting other programs. This check covers those runtime operations; it is not a general security sandbox.
 
-Tests create synthetic data in temporary directories. The library does not connect to the network. The first preview packages the integration 0.1.1 behavior as `0.1.1a1`; API and plan formats may change.
+Tests create synthetic data in temporary directories. The library does not connect to the network. Current `0.2.0a1` adds an installable skill, local processing tools and a persistent workspace; the separate `HistoricalImages` request integration still uses in-memory state. API and plan formats may change. [Changelog](../CHANGELOG.md)
 
 ## License
 

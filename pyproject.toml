@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "image-context-manager"
 version = "0.2.0a1"
-description = "Host-owned request-time image lifecycle management for agent harnesses (experimental)"
+description = "Local image tools and installable skills for Claude Code and Codex (experimental)"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}

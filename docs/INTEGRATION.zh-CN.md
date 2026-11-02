@@ -1,4 +1,4 @@
-# 接入要求
+# Python 接入要求
 
 > **Claude Code / Codex 用户：** 新增 [skill 和本地工具安装方式](AGENT-SETUP.zh-CN.md)，包含压缩、裁剪、结果保存、召回与原生子 agent 交接。下面的请求组装说明面向自己控制请求的 Python 程序。
 

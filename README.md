@@ -46,7 +46,7 @@
 
 <div align="center">
 
-Manage which images your agent sends on each turn. Run the [offline demo](#path-1-offline-demo), inspect the changed requests, or connect your own [Python agent](docs/INTEGRATION.md). Originals are stored separately; your agent decides what to send.
+Image-handling skills and local tools for Claude Code and Codex. Choose compression, crops, text results or originals for the task, or delegate inspection to a visual worker that returns text. [Install and use →](docs/AGENT-SETUP.md)
 
 </div>
 
@@ -54,7 +54,7 @@ Manage which images your agent sends on each turn. Run the [offline demo](#path-
 
 # Keep the pixels your task needs.
 
-Once a draft has been read, replace it with the recorded result. Keep images that still need comparison or checking, and retrieve originals when needed.
+Choose what this step needs: crop a verified region, compress when detail loss is acceptable, and save text results after checking a completed task. Keep originals for comparison or verification. The skill manages future input; it cannot erase existing host-history images. The animation below demonstrates separate Python request handling.
 
 ![Offline synthetic demo replay: actual local request artifacts move from 3 images to 2, then back to 3 for comparison and recall. No model or ASC session.](docs/images/reference/demo-en.gif)
 
@@ -63,6 +63,19 @@ Once a draft has been read, replace it with the recorded result. Keep images tha
 <br/>
 
 > **For AI agents and crawlers:** use the [Claude Code / Codex setup](docs/AGENT-SETUP.md) for the skill, local tools and visual worker. Applications that own complete requests can also use the [Python integration](docs/INTEGRATION.md). Skills cannot erase existing host history; real-session net benefit remains unverified.
+
+# What it does
+
+| Capability | How it works |
+|---|---|
+| Choose a representation | The skill guides the agent using purpose, task stage and verification; there is no fixed compression sequence |
+| Compress and crop | Local tools resize / JPEG-compress or crop a verified region while retaining originals |
+| Save text results | Your existing agent reads, summarizes and verifies; tools bind the result to its original, version and stage |
+| Use a visual worker | Prepare a handoff, then let the host invoke a separate visual worker; the main conversation receives text |
+| Store and recall | Persist images and results across restarts; check original hashes on retrieval |
+| Process historical requests | For programs that own complete requests, the Python library replaces eligible old images |
+
+**Validation:** 27 tests and Python 3.9 / 3.12 CI pass. A Codex functional session exercised worker inspection, text-result reuse and original recall. Claude Code's actual session remains unverified because of local account status; real multi-turn net benefit has not passed acceptance. [Release validation](docs/VALIDATION.md)
 
 # Which Image Context Manager path do I need?
 
@@ -84,14 +97,14 @@ Claude Code / Codex users: start with [skill and tools setup](docs/AGENT-SETUP.m
 ## Claude Code / Codex: install the skill and tools
 
 ```sh
+git clone https://github.com/messsiii/image-context-manager.git
+cd image-context-manager
 python3 -m venv .venv
 .venv/bin/python -m pip install .
 .venv/bin/icm install --agent both --project /absolute/path/to/your-project
 ```
 
 [Run inside the cloned repository, then start a new session. Workflow, choices and commands →](docs/AGENT-SETUP.md)
-
-
 
 ## Path 1: Offline Demo
 
@@ -181,9 +194,9 @@ ICM checks the result format and which original image it belongs to. It cannot t
 
 <br/>
 
-# Image Context Manager for your agent
+# Python integration: process historical images in a request copy
 
-Maintained in this repository. Designed for agents that can control everything sent to the model.
+This additional integration is for Python programs that control complete requests. For Claude Code / Codex skills and local tools, use the [setup guide](docs/AGENT-SETUP.md).
 
 Your agent supplies all images from the conversation and their confirmed usage states. ICM works on a copy of the request, leaving the original conversation intact. Originals stay available for comparison or retrieval; SHA-256 checks confirm retrieved files match exactly. Your agent still checks the final format and sends the request.
 
@@ -194,7 +207,7 @@ Your agent supplies all images from the conversation and their confirmed usage s
   <img alt="Your agent supplies conversation history and confirmed task states. ICM checks a copy of the request and keeps originals; your agent sends the final request." src="docs/images/reference/architecture-en-light.svg" width="100%">
 </picture>
 
-The current example format supports text and PNG/JPEG images embedded directly in the request. It does not handle remote image links or images returned by model tools, automatically read image text, or connect to default Codex. The snippet below requires images to be registered in your agent first; see the [integration requirements](docs/INTEGRATION.md) for the inputs.
+This Python example format supports text and PNG/JPEG images embedded directly in requests; remote image links and tool-returned images are unsupported. It does not automatically read image text or provide an interface for rewriting default Codex history. The snippet below requires images to be registered in your agent first; see the [integration requirements](docs/INTEGRATION.md) for the inputs.
 
 ```python
 from image_context_manager import apply_plan, inspect_images
@@ -288,7 +301,7 @@ No. Your agent must mark task states and supply results from completed tasks. IC
 <details>
 <summary><b>How do I go into production?</b></summary>
 
-Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. Default Codex integration, benefits for other tasks and stability when replacing historical images over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-agent)
+Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. The small Codex skill workflow passed functional checks; full default-host history replacement, real-task net benefit and historical-image replacement over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-agent)
 
 </details>
 
@@ -305,6 +318,10 @@ Yes. Rebuild comparison requests from the full original conversation, or use `ma
 
 | Component | What it's for |
 | --- | --- |
+| [Skill and setup](docs/AGENT-SETUP.md) | Install guidance and a native visual worker for Claude Code / Codex. |
+| [Local image tools](src/image_context_manager/cli.py) | `icm` commands for compression, cropping, text results, handoffs and recall. |
+| [Persistent workspace](src/image_context_manager/agent.py) | Store originals and results across restarts; check source and version bindings. |
+| [Validation record](docs/VALIDATION.md) | Passed checks and capabilities that remain unverified. |
 | [HistoricalImages](src/image_context_manager/history.py) | Track image uses and states, and choose which images to send. |
 | [AssetStore](src/image_context_manager/core.py) | Save originals and check retrieved files match exactly. |
 | [Offline Demo](src/image_context_manager/demo.py) | Try replacing, comparing and retrieving synthetic images. |
@@ -314,6 +331,8 @@ Yes. Rebuild comparison requests from the full original conversation, or use `ma
 | [Transport Diagnostics](experiments/websocket-diagnostics/README.md) | Connection test records and unresolved WebSocket disconnections for large messages. |
 
 <br/>
+
+[Contributing](CONTRIBUTING.md)
 
 ## Citation
 
