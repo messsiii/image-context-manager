@@ -8,7 +8,7 @@
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/tagline-zh-CN-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tagline-zh-CN-dark.svg">
-  <img alt="Agent 图片生命周期。" src="docs/images/reference/tagline-zh-CN-light.svg" width="400">
+  <img alt="管理 agent 每轮使用的图片。" src="docs/images/reference/tagline-zh-CN-light.svg" width="400">
 </picture>
 </div>
 
@@ -46,7 +46,7 @@
 
 <div align="center">
 
-开源图片生命周期组件。运行[离线示例](#路径-1离线示例)，检查请求副本，或接入自己的 [Python 宿主](docs/INTEGRATION.zh-CN.md)。原图保存在请求之外，宿主掌握决策与发送。
+帮助 agent 管理每轮发送的图片。运行[离线示例](#路径-1离线示例)，查看处理前后的请求，或接入自己的 [Python agent 程序](docs/INTEGRATION.zh-CN.md)。原图单独保存，由你的程序决定最终发送什么。
 
 </div>
 
@@ -54,15 +54,15 @@
 
 # 让图片跟着任务走。
 
-完成草稿读取，保留比较和待核验图片；再次需要像素时，恢复原图。
+草稿看完后，可以用已有结论替代旧图；还要比较或核对的图片继续保留，需要时再取回原图。
 
-![离线合成示例回放：实际本地请求文件从3张图片变为2张，再为比较与召回恢复到3张。不是模型或ASC会话。](docs/images/reference/demo-zh-CN.gif)
+![离线合成示例回放：实际本地请求文件从3张图片变为2张，再为比较与取回原图恢复到3张。不是模型或ASC会话。](docs/images/reference/demo-zh-CN.gif)
 
-[查看离线闭环与任务决策示例 ↗](docs/GUIDE.zh-CN.md)
+[查看完整离线示例与处理规则 ↗](docs/GUIDE.zh-CN.md)
 
 <br/>
 
-> **AI agent 与爬虫：** 从[工作流地图](docs/GUIDE.zh-CN.md)、[宿主契约](docs/INTEGRATION.zh-CN.md)和[实验证据](experiments/README.md)开始。ICM 是实验性请求时 Python 组件，不是默认 Codex 插件。宿主声明可信任务状态并负责最终发送；引用不是自动 OCR 或摘要。
+> **供 AI agent 与爬虫阅读：** 从[工作流程](docs/GUIDE.zh-CN.md)、[接入要求](docs/INTEGRATION.zh-CN.md)和[实验结果](experiments/README.md)开始。ICM 是在发送模型请求前处理图片的 Python 组件，目前仍在实验阶段，不是安装后就能在 Codex 中使用的插件。你的 agent 程序需要提供已确认的任务状态，并负责发送请求；用来替代旧图的文字引用不会自动识别图片文字或生成摘要。
 
 # 我需要哪种 Image Context Manager 接入方式？
 
@@ -70,18 +70,18 @@
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/paths-zh-CN-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/paths-zh-CN-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/paths-zh-CN-dark.svg">
-  <img alt="Three local paths: offline demo, Python source example and host-owned Python library. Each keeps request copies and originals; no cloud product." src="docs/images/reference/paths-zh-CN-light.svg" width="100%">
+  <img alt="三种本地用法：离线示例、Python 源码示例，以及接入自己 agent 的 Python 库。都会保留请求副本和原图，不提供云服务。" src="docs/images/reference/paths-zh-CN-light.svg" width="100%">
 </picture>
 
-- **[路径 1：离线示例](#路径-1离线示例)：** 不用模型或 API 密钥，检查本地请求副本。
-- **[路径 2：Python 示例](#路径-2python-示例)：** 从源码目录运行入口。
-- **[路径 3：Python 库](#路径-3python-库)：** 先从 Python 跑通，再连接自己的宿主请求循环。
+- **[路径 1：离线示例](#路径-1离线示例)：** 不用模型或 API 密钥，查看处理后的本地请求。
+- **[路径 2：Python 示例](#路径-2python-示例)：** 从源码目录运行示例。
+- **[路径 3：Python 库](#路径-3python-库)：** 先从 Python 跑通，再接入自己的 agent，在每轮发送前处理图片。
 
 # 快速开始
 
 ## 路径 1：离线示例
 
-在本地运行合成生命周期示例。需要 Python 3.9+；预览版从源码安装，未发布到 PyPI。
+在本地用合成图片演示保留、替换和取回原图的完整过程。需要 Python 3.9+；预览版从源码安装，未发布到 PyPI。
 
 ```sh
 git clone https://github.com/messsiii/image-context-manager.git
@@ -111,7 +111,7 @@ python3 -m venv .venv
 
 ## 路径 3：Python 库
 
-从自己的 Python 代码调用库。先用内置示例跑通，再接入真实宿主状态：
+从自己的 Python 代码调用库。先用内置示例跑通，再接入自己 agent 的真实任务状态：
 
 **1. 安装 Image Context Manager（Python >= 3.9）：**
 
@@ -127,7 +127,7 @@ source .venv/bin/activate
 run-data/library
 ```
 
-内置示例使用合成图片与显式宿主完成事件，不调用模型，也不读取你的私人截图。
+内置示例使用合成图片，并由示例程序明确标记任务完成，不调用模型，也不读取你的私人截图。
 
 **3. 保存为 `try_icm.py`：**
 
@@ -149,43 +149,43 @@ python try_icm.py
 
 本地文件展示 `initial: 3 → retired: 2 → comparison: 3 → recall: 3`。上方动画回放这些已保存文件，不是模型或 ASC 录屏。
 
-**5. 将请求副本边界移入自己的宿主：**
+**5. 接到自己的 agent，每轮发送前处理图片：**
 
-由宿主保留完整原始历史和可信任务元数据。登记并绑定实际内联图片，真实完成后提交结果，在模型适配器发送前生成并校验计划：
+由你的 agent 程序保存完整原始对话，并记录每张图的用途和已确认的任务状态。登记请求中直接携带的图片，任务实际完成后保存结果，再由 ICM 决定哪些旧图可以替换为文字。检查处理后的请求，再发送给模型：
 
 ```python
-# 在宿主完成登记与可信状态更新后：
+# 在你的 agent 程序登记图片并确认任务状态后：
 manager.bind_request(inspect_images(canonical))
 plan, decisions = manager.plan(turn_id, states, current_start=current_start)
 outgoing = apply_plan(canonical, plan, generation=turn_id)
-# 由你的适配器检查 outgoing 并发送给模型服务。
+# 由你的程序检查 outgoing 并发送给模型服务。
 ```
 
-结果凭据校验结构与来源，不判断语义真值；宿主必须确认结果足以支持下一任务。正确声明后，受保护、当前、比较和待核验证据继续保留像素。
+ICM 会检查任务结果的格式及其对应的原图，但不能判断结果是否正确、是否足够完成下一步；这需要你的 agent 程序确认。只要状态标记正确，当前使用、需要比较、待核对或明确要求保留的图片就会继续发送。
 
-[Python 库契约 ↗](docs/INTEGRATION.zh-CN.md) · [Windows 命令路径 ↗](docs/GUIDE.zh-CN.md#跑通离线闭环)
+[接入要求 ↗](docs/INTEGRATION.zh-CN.md) · [Windows 运行命令 ↗](docs/GUIDE.zh-CN.md#跑通离线闭环)
 
 <br/>
 
-# 将 Image Context Manager 接入宿主
+# 将 Image Context Manager 接入你的 agent
 
-由本仓库维护，面向能控制最终请求的宿主。
+由本仓库维护，适用于能决定最终向模型发送哪些内容的 agent 程序。
 
-宿主提供完整图片历史和可信生命周期状态。ICM 生成经过校验的请求副本，保留原图供比较与 SHA-256 精确召回。模型适配器负责最终格式检查与发送。
+你的程序提供对话中的全部图片及已确认的使用状态。ICM 在一份请求副本上处理旧图，不改动原始对话。原图会保留，方便比较或重新取回；取回时用 SHA-256 校验，确认文件与原图完全一致。最终的格式检查和发送仍由你的程序负责。
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-zh-CN-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/architecture-zh-CN-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-zh-CN-dark.svg">
-  <img alt="Host agent and request builder supply trusted history. ICM validates a request copy and keeps originals; host adapter owns the send." src="docs/images/reference/architecture-zh-CN-light.svg" width="100%">
+  <img alt="你的 agent 提供对话历史和已确认的任务状态。ICM 检查请求副本并保存原图，最终由你的程序发送。" src="docs/images/reference/architecture-zh-CN-light.svg" width="100%">
 </picture>
 
-默认本地格式支持文字和内联 PNG/JPEG。远程图片 URL、模型工具返回图片、自动 OCR 和默认 Codex 安装不在此适配器范围。以下片段运行在已准备好的宿主中，输入要求见契约。
+当前示例格式支持文字，以及直接放在请求中的 PNG/JPEG 图片。暂不处理远程图片链接或模型工具返回的图片，也不会自动识别图片文字或接入默认 Codex。以下片段需要先在你的 agent 程序中完成图片登记，所需信息见[接入要求](docs/INTEGRATION.zh-CN.md)。
 
 ```python
 from image_context_manager import apply_plan, inspect_images
 
-# manager 为已登记的 HistoricalImages；states 为可信 ImageUse 元数据
+# manager 已登记图片；states 记录每张图已确认的用途和状态
 manager.bind_request(inspect_images(canonical))
 plan, decisions = manager.plan(turn_id, states, current_start=current_start)
 outgoing = apply_plan(canonical, plan, generation=turn_id)
@@ -196,13 +196,13 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 <br/>
 
-# Image Context Manager HTTP 基准
+# Image Context Manager HTTP 性能测试
 
-<img alt="历史隔离HTTP合成基准：两组均通过35/35严格检查。管理组/重发组比值：累计socket发送0.3095，逐轮TTFT中位数0.6881，整流程E2E中位数0.7291。三个指标独立，不代表token或计费节省。" src="docs/images/reference/benchmark-zh-CN.jpg" width="100%">
+<img alt="以往独立HTTP测试环境中的合成任务结果：两组均通过35/35严格检查。优化组与原图组的比值：累计网络发送字节0.3095，每轮等待首个输出的时间中位数0.6881，完整流程耗时中位数0.7291。不代表token或费用节省。" src="docs/images/reference/benchmark-zh-CN.jpg" width="100%">
 
-仅展示既有证据：隔离 Codex HTTP 宿主、7 项合成任务、5 对 A/B、70 次严格检查，两组各通过 35/35。B/A 比值：累计 socket 发送 **0.3095**、逐轮 TTFT 中位数 **0.6881**、完整工作流 E2E 中位数 **0.7291**。socket 发送包括启动、TLS、重试与回退；TTFT 和整流程 E2E 分别统计。这不能证明默认 Codex、真实 ASC、计费或通用收益。WebSocket 关闭码 1009 仍未解决。[结果与来源 ↗](experiments/README.md)
+这里只展示已有测试：在独立运行的 Codex HTTP 测试程序中，用 7 项合成任务做了 5 对 A/B 对照，共完成 70 次严格检查，两组各通过 35/35。优化组 / 原图组的比值为：累计网络发送字节 **0.3095**、每轮等待首个输出的时间（TTFT）中位数 **0.6881**、完整流程耗时（E2E）中位数 **0.7291**。网络字节统计包括启动、加密连接（TLS）、重试和切换备用连接的流量；两项耗时分别统计。这些结果尚不能证明默认 Codex、真实 App Store Connect（ASC）任务或其他场景也有收益，也没有验证费用节省。WebSocket 因消息过大而断开的问题（关闭码 1009）仍未解决。[结果与测试说明 ↗](experiments/README.md)
 
-## 生命周期、宿主契约、召回与实验等内容，见[文档 ↗](docs/GUIDE.zh-CN.md)
+## 图片何时保留、何时替换，如何接入和取回原图，详见[文档 ↗](docs/GUIDE.zh-CN.md)
 
 <br/>
 
@@ -211,77 +211,77 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 <details>
 <summary><b>我应该选择哪条路径？</b></summary>
 
-想检查输出，选**离线示例**；想从源码运行，选 **Python 示例**；想连接自己的宿主，选 **Python 库**。三条路径都在本地运行，不是托管云 agent。
+想检查输出，选**离线示例**；想从源码运行，选 **Python 示例**；想接入自己的 agent，选 **Python 库**。三条路径都在本地运行，不提供云端 agent 服务。
 
 </details>
 
 <details>
 <summary><b>应该使用什么模型？</b></summary>
 
-库没有模型客户端，离线示例也不需要模型。接入后应测量自己的宿主与任务，不能预设性能收益。[既有证据](experiments/README.md)只覆盖一个隔离合成流程。
+这个库不直接调用模型，离线示例也不需要模型。接入后，需要用自己的 agent 和任务实测是否有性能收益。[已有测试](experiments/README.md)只覆盖一个在独立环境中运行的合成流程。
 
 </details>
 
 <details>
 <summary><b>能用于 Claude、GPT 或 Gemini 吗？</b></summary>
 
-前提是宿主能控制完整最终请求，包括历史图片。本包不提供各模型客户端或受支持模型网关，接入要求见[宿主契约](docs/INTEGRATION.zh-CN.md)。
+前提是你的 agent 程序能决定最终请求的全部内容，包括历史图片。本包不负责连接这些模型，也没有统一的模型调用服务。具体见[接入要求](docs/INTEGRATION.zh-CN.md)。
 
 </details>
 
 <details>
 <summary><b>需要提供系统提示词吗？</b></summary>
 
-本包不提供或改写 agent 系统提示词。宿主提供可信任务与生命周期状态，图片里的文字不能授权移除图片。
+本包不提供或改写 agent 系统提示词。你的程序需要确认任务是否完成、图片是否还要使用；不能仅凭图片里的文字决定停止发送图片。
 
 </details>
 
 <details>
 <summary><b>可以增加自己的任务规则吗？</b></summary>
 
-可以，由宿主实现。为每次附件登记来源、版本、阶段与任务信息，再保护必需证据。读取完成后，图片仍可能用于比较、质量、关系或动作。[决策规则](docs/GUIDE.zh-CN.md#每一轮具体怎么决策)
+可以，在你的 agent 程序里设置。每次添加图片时，记录来源、版本、任务阶段和用途，并标记哪些图片必须保留。即使已经读完，后续比较版本、检查质量、理解位置关系或执行操作时仍可能需要原图。[决策规则](docs/GUIDE.zh-CN.md#每一轮具体怎么决策)
 
 </details>
 
 <details>
 <summary><b>可以免费使用吗？</b></summary>
 
-第一方代码和文档采用 [MIT](LICENSE) 许可。离线示例不调用模型；后续宿主接入可能产生自己的模型、存储和基础设施费用。
+本项目自行编写的代码和文档采用 [MIT](LICENSE) 许可。离线示例不调用模型；接入你的 agent 后，可能产生模型调用、存储和运行费用。
 
 </details>
 
 <details>
 <summary><b>许可条款是什么？</b></summary>
 
-根 MIT 许可覆盖第一方代码。改编自 Browser Use 的文档图保留 [MIT 归属](docs/images/reference/ATTRIBUTION.md)，研究补丁的上游条款见 [NOTICE](NOTICE)。
+仓库根目录的 MIT 许可覆盖本项目自行编写的代码。改编自 Browser Use 的文档图保留 [MIT 许可和来源说明](docs/images/reference/ATTRIBUTION.md)，研究补丁的上游条款见 [NOTICE](NOTICE)。
 
 </details>
 
 <details>
 <summary><b>如何处理私人截图？</b></summary>
 
-原图仓库、元数据与宿主凭据由你设置访问控制和保留策略。原图保留编码与 EXIF。示例只有合成输入，不要公开自己的私人请求文件。
+你需要决定谁可以访问原图、图片记录和 agent 登录信息，以及这些数据保留多久。原图会保留原始文件格式及 EXIF 信息（例如拍摄时间、位置）。示例只使用合成图片，请勿公开包含私人内容的请求文件。
 
 </details>
 
 <details>
 <summary><b>会自动识别任务完成或总结图片吗？</b></summary>
 
-不会。宿主声明生命周期并提供真实结果字段；凭据校验不证明真值或语义充分性。自动 OCR、摘要、裁剪选择和子智能体分发不在本组件范围。
+不会。你的 agent 程序需要标记任务状态，并提供实际完成任务得到的结果。ICM 只检查结果格式和图片来源，不能判断结果是否正确、信息是否足够。本组件不会自动识别图片文字、生成摘要、选择裁剪区域或分配子 agent。
 
 </details>
 
 <details>
 <summary><b>如何投入生产使用？</b></summary>
 
-先跑离线示例，在隔离宿主中实现契约，再验证真实发送请求、重试、召回和任务质量。默认 Codex 接入、任意任务收益和 WS 图片替换稳定性尚未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的宿主适合接入吗)。
+先跑离线示例，再按接入要求接到独立测试用的 agent 程序，检查实际发送内容、失败重试、取回原图和任务结果是否正确。默认 Codex 接入、其他任务是否受益，以及通过 WebSocket 替换历史图片的稳定性，尚未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的宿主适合接入吗)。
 
 </details>
 
 <details>
 <summary><b>图片替换后还能恢复原图吗？</b></summary>
 
-可以。比较时从完整原始历史重建请求；显式召回用 `manager.recall(use)` 校验原始字节，再作为新的受保护附件登记。替换只改变请求副本，不删除完整历史或原图仓库。[完整示例](src/image_context_manager/demo.py)。
+可以。比较时，从完整原始对话重新组装请求；也可以调用 `manager.recall(use)`，确认取回的文件与原图一致，再重新添加并标记为需要保留的图片。替换只改变本次发送的请求，不删除原始对话或保存的原图。[完整示例](src/image_context_manager/demo.py)。
 
 </details>
 
@@ -291,13 +291,13 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 | 组件 | 用途 |
 | --- | --- |
-| [HistoricalImages](src/image_context_manager/history.py) | 请求时图片生命周期登记与计划。 |
-| [AssetStore](src/image_context_manager/core.py) | 保存原图并校验精确召回。 |
-| [离线示例](src/image_context_manager/demo.py) | 检查合成替换、比较和召回。 |
+| [HistoricalImages](src/image_context_manager/history.py) | 记录图片用途和状态，决定本轮保留哪些图片。 |
+| [AssetStore](src/image_context_manager/core.py) | 保存原图，取回时检查文件是否完全一致。 |
+| [离线示例](src/image_context_manager/demo.py) | 用合成图片演示替换、比较和取回原图。 |
 | [Python 示例](examples/offline_demo.py) | 从源码调用已安装包。 |
-| [宿主契约](docs/INTEGRATION.zh-CN.md) | 连接完整历史与可信宿主状态。 |
-| [Codex 研究适配器](experiments/codex/README.md) | 历史隔离 HTTP 源码补丁，仅供研究。 |
-| [传输诊断](experiments/websocket-diagnostics/README.md) | 元数据与尚未解决的 WS 大小拒绝。 |
+| [接入要求](docs/INTEGRATION.zh-CN.md) | 说明 agent 需要提供的对话历史、图片信息和任务状态。 |
+| [Codex 研究适配器](experiments/codex/README.md) | 以往 HTTP 实验使用的 Codex 源码修改，仅供研究。 |
+| [传输诊断](experiments/websocket-diagnostics/README.md) | 连接测试记录，以及尚未解决的 WebSocket 大消息断开问题。 |
 
 <br/>
 
@@ -329,4 +329,4 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 </div>
 
-<div align="center"> 实验性开源项目 · AI 生成办公室示意图 · <a href="docs/images/reference/ATTRIBUTION.md">图示与布局归属</a> </div>
+<div align="center"> 实验性开源项目 · AI 生成办公室示意图 · <a href="docs/images/reference/ATTRIBUTION.md">图示与布局来源说明</a> </div>

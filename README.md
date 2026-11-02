@@ -8,7 +8,7 @@
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/tagline-en-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tagline-en-dark.svg">
-  <img alt="Image lifecycle for agents." src="docs/images/reference/tagline-en-light.svg" width="400">
+  <img alt="Manage images across agent turns." src="docs/images/reference/tagline-en-light.svg" width="400">
 </picture>
 </div>
 
@@ -46,7 +46,7 @@
 
 <div align="center">
 
-The open-source image lifecycle component. Run the [offline demo](#path-1-offline-demo), inspect request copies, or connect your own [Python harness](docs/INTEGRATION.md). Originals stay outside the request; the host stays in control.
+Manage which images your agent sends on each turn. Run the [offline demo](#path-1-offline-demo), inspect the changed requests, or connect your own [Python agent](docs/INTEGRATION.md). Originals are stored separately; your agent decides what to send.
 
 </div>
 
@@ -54,7 +54,7 @@ The open-source image lifecycle component. Run the [offline demo](#path-1-offlin
 
 # Keep the pixels your task needs.
 
-Finish reading a draft, keep comparison and pending images, then bring the original back when pixels matter again.
+Once a draft has been read, replace it with the recorded result. Keep images that still need comparison or checking, and retrieve originals when needed.
 
 ![Offline synthetic demo replay: actual local request artifacts move from 3 images to 2, then back to 3 for comparison and recall. No model or ASC session.](docs/images/reference/demo-en.gif)
 
@@ -62,7 +62,7 @@ Finish reading a draft, keep comparison and pending images, then bring the origi
 
 <br/>
 
-> **AI agents and crawlers:** start with the [workflow map](docs/GUIDE.md), [host contract](docs/INTEGRATION.md), and [experiment evidence](experiments/README.md). ICM is an experimental request-time Python component, not a default Codex plugin. The host declares trusted task state and owns the final send; references are not automatic OCR or summaries.
+> **For AI agents and crawlers:** start with the [workflow guide](docs/GUIDE.md), [integration requirements](docs/INTEGRATION.md), and [test results](experiments/README.md). ICM is an experimental Python component that processes images before a model request is sent. Installing it does not connect it to Codex. Your agent must provide confirmed task states and send the final request; text references that replace old images do not automatically read image text or generate summaries.
 
 # Which Image Context Manager path do I need?
 
@@ -70,18 +70,18 @@ Finish reading a draft, keep comparison and pending images, then bring the origi
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/paths-en-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/paths-en-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/paths-en-dark.svg">
-  <img alt="Three local paths: offline demo, Python source example and host-owned Python library. Each keeps request copies and originals; no cloud product." src="docs/images/reference/paths-en-light.svg" width="100%">
+  <img alt="Three local paths: offline demo, Python source example and Python library for your agent. Each keeps request copies and originals; no cloud product." src="docs/images/reference/paths-en-light.svg" width="100%">
 </picture>
 
 - **[Path 1: Offline Demo](#path-1-offline-demo):** Inspect local request copies without a model or API key.
 - **[Path 2: Python Example](#path-2-python-example):** Run the source example from your checkout.
-- **[Path 3: Python Library](#path-3-python-library):** Start from Python, then connect your own host's request loop.
+- **[Path 3: Python Library](#path-3-python-library):** Start from Python, then process images before each request from your agent.
 
 # Quickstart
 
 ## Path 1: Offline Demo
 
-Run the synthetic lifecycle fixture locally. Python 3.9+ is required; this preview installs from source, not PyPI.
+Use synthetic images to try keeping, replacing and retrieving images locally. Python 3.9+ is required; this preview installs from source, not PyPI.
 
 ```sh
 git clone https://github.com/messsiii/image-context-manager.git
@@ -99,7 +99,7 @@ No model account or API key is needed. Installation may download dependencies; t
 
 ## Path 2: Python Example
 
-After installing from the checkout above, run the same fixture through the source entry point:
+After installing from the checkout above, run the same demo through the source entry point:
 
 ```sh
 .venv/bin/python examples/offline_demo.py --out run-data/example
@@ -111,7 +111,7 @@ After installing from the checkout above, run the same fixture through the sourc
 
 ## Path 3: Python Library
 
-Use the library from your own Python code. The bundled fixture provides a small first run before you wire real host state:
+Use the library from your own Python code. The bundled demo provides a small first run before connecting real task states from your agent:
 
 **1. Install Image Context Manager (Python >= 3.9):**
 
@@ -127,7 +127,7 @@ source .venv/bin/activate
 run-data/library
 ```
 
-The fixture uses synthetic images and explicit host-completion events. It does not call a model or read your private screenshots.
+The demo uses synthetic images and task-completion events explicitly marked by the demo program. It does not call a model or read your private screenshots.
 
 **3. Save this as `try_icm.py`:**
 
@@ -147,62 +147,62 @@ print("Exact recall:", report["original_recalled_byte_exact"])
 python try_icm.py
 ```
 
-The local artifacts show `initial: 3 → retired: 2 → comparison: 3 → recall: 3`. The animation above replays these saved artifacts; it is not a recorded model or ASC run.
+The local files show `initial: 3 → retired: 2 → comparison: 3 → recall: 3`. The animation above replays these saved files; it is not a recorded model or ASC run.
 
-**5. Move the request-copy boundary into your own host:**
+**5. Process images before your agent sends each request:**
 
-Keep canonical history and trusted task metadata in your host. Register and bind actual inline images, commit results after real completion, then plan and validate before the provider adapter sends:
+Keep the full original conversation in your agent and record each image’s purpose and confirmed task state. Register the images carried directly in the request and save results after tasks actually finish. ICM can then choose which old images to replace with text. Check the changed request before sending it to the model:
 
 ```python
-# Inside your host, after registration and trusted state updates:
+# Inside your agent, after registering images and confirming task states:
 manager.bind_request(inspect_images(canonical))
 plan, decisions = manager.plan(turn_id, states, current_start=current_start)
 outgoing = apply_plan(canonical, plan, generation=turn_id)
-# Your adapter checks outgoing and sends it to your provider.
+# Your agent checks outgoing and sends it to the model service.
 ```
 
-A receipt validates result shape and provenance, not semantic truth. The host must confirm that the result is sufficient for the next task. Protected, current, comparison and pending evidence keeps its pixels when correctly declared.
+ICM checks the result format and which original image it belongs to. It cannot tell whether the result is correct or enough for the next step; your agent must confirm that. With the right state labels, images that are current, protected, needed for comparison or awaiting checks stay in the request.
 
-[Python library contract ↗](docs/INTEGRATION.md) · [Windows command paths ↗](docs/GUIDE.md#try-the-offline-loop)
+[Integration requirements ↗](docs/INTEGRATION.md) · [Windows command paths ↗](docs/GUIDE.md#try-the-offline-loop)
 
 <br/>
 
-# Image Context Manager for your harness
+# Image Context Manager for your agent
 
-Maintained in this repository. Designed for hosts that control final requests.
+Maintained in this repository. Designed for agents that can control everything sent to the model.
 
-Your host supplies canonical image history and trusted lifecycle state. ICM builds a checked request copy, preserving originals for comparison and SHA-256-verified recall. Your provider adapter owns the final format check and send.
+Your agent supplies all images from the conversation and their confirmed usage states. ICM works on a copy of the request, leaving the original conversation intact. Originals stay available for comparison or retrieval; SHA-256 checks confirm retrieved files match exactly. Your agent still checks the final format and sends the request.
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-en-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/architecture-en-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-en-dark.svg">
-  <img alt="Host agent and request builder supply trusted history. ICM validates a request copy and keeps originals; host adapter owns the send." src="docs/images/reference/architecture-en-light.svg" width="100%">
+  <img alt="Your agent supplies conversation history and confirmed task states. ICM checks a copy of the request and keeps originals; your agent sends the final request." src="docs/images/reference/architecture-en-light.svg" width="100%">
 </picture>
 
-The default local schema supports text and inline PNG/JPEG. Remote image URLs, provider tool-result images, automatic OCR and default Codex installation are outside this adapter. The fragment below runs inside a prepared host; the contract defines its inputs.
+The current example format supports text and PNG/JPEG images embedded directly in the request. It does not handle remote image links or images returned by model tools, automatically read image text, or connect to default Codex. The snippet below requires images to be registered in your agent first; see the [integration requirements](docs/INTEGRATION.md) for the inputs.
 
 ```python
 from image_context_manager import apply_plan, inspect_images
 
-# manager: registered HistoricalImages; states: trusted ImageUse metadata
+# manager has registered images; states holds confirmed image uses and states
 manager.bind_request(inspect_images(canonical))
 plan, decisions = manager.plan(turn_id, states, current_start=current_start)
 outgoing = apply_plan(canonical, plan, generation=turn_id)
-# Check the actual outgoing images; do not append canonical history again.
+# Check the outgoing images; do not append the full original history again.
 ```
 
 [Runnable walkthrough ↗](examples/offline_demo.py) · [Integration docs ↗](docs/INTEGRATION.md)
 
 <br/>
 
-# Image Context Manager HTTP benchmark
+# Image Context Manager HTTP performance test
 
-<img alt="Historical isolated HTTP synthetic benchmark. Both arms passed 35 of 35 strict checks. Managed/replay ratios: cumulative socket sends 0.3095, median TTFT 0.6881, median workflow E2E 0.7291. These are separate measures, not token or billing savings." src="docs/images/reference/benchmark-en.jpg" width="100%">
+<img alt="Earlier synthetic-task results from a separate HTTP test environment. Both groups passed 35 of 35 strict checks. Optimized/original ratios: total network bytes sent 0.3095, median time to first output 0.6881, median full-workflow time 0.7291. These are not token or billing savings." src="docs/images/reference/benchmark-en.jpg" width="100%">
 
-Existing evidence only: seven synthetic tasks, five A/B pairs, 70 strict checks in an isolated Codex HTTP host. Both arms passed 35/35. B/A ratios: cumulative socket sends **0.3095**, median turn TTFT **0.6881**, median complete-workflow E2E **0.7291**. Socket sends include startup, TLS, retries and fallback; TTFT and workflow E2E are separate measures. This is not default Codex, real ASC, billing or universal benefit evidence. WebSocket close 1009 remains unresolved. [Results and provenance ↗](experiments/README.md)
+Earlier results only: seven synthetic tasks, five A/B pairs and 70 strict checks in a separately run Codex HTTP test program. Both groups passed 35/35. Optimized / original ratios: total network bytes sent **0.3095**, median time to first output per turn (TTFT) **0.6881**, and median full-workflow time (E2E) **0.7291**. Network totals include startup, encrypted connections (TLS), retries and fallback connections; the two timing measures are reported separately. These results do not establish benefits for default Codex, real App Store Connect (ASC) tasks or other workflows, and do not verify billing savings. WebSocket disconnections for oversized messages (close code 1009) remain unresolved. [Results and test details ↗](experiments/README.md)
 
-## Lifecycle rules, host contracts, recall, experiments, and more in the [Docs ↗](docs/GUIDE.md)
+## When to keep or replace images, how to integrate and retrieve originals, and more in the [Docs ↗](docs/GUIDE.md)
 
 <br/>
 
@@ -211,77 +211,77 @@ Existing evidence only: seven synthetic tasks, five A/B pairs, 70 strict checks 
 <details>
 <summary><b>Which path should I choose?</b></summary>
 
-Choose the **offline demo** to inspect outputs, the **Python example** to run from source, or the **Python library** to start wiring your own host. All three are local; none is a hosted cloud agent.
+Choose the **offline demo** to inspect outputs, the **Python example** to run from source, or the **Python library** to connect your own agent. All three are local; none provides a cloud agent service.
 
 </details>
 
 <details>
 <summary><b>What is the best model to use?</b></summary>
 
-The library has no model client and the offline demo needs no model. Measure your actual host and task before drawing performance conclusions. [Existing evidence](experiments/README.md) covers one isolated synthetic workflow.
+The library does not call a model, and the offline demo needs none. Test your own agent and tasks to find out whether performance improves. [Existing results](experiments/README.md) cover one synthetic workflow in a separate test environment.
 
 </details>
 
 <details>
 <summary><b>Can I use it with Claude, GPT, or Gemini?</b></summary>
 
-Only if your host can control its complete final request, including historical images. This package does not supply provider-specific clients or a supported-model gateway. Follow the [host contract](docs/INTEGRATION.md).
+Only if your agent can control everything in the final request, including historical images. This package does not connect to those models or provide a unified model service. See the [integration requirements](docs/INTEGRATION.md).
 
 </details>
 
 <details>
 <summary><b>Do I need to provide a system prompt?</b></summary>
 
-The package does not supply or rewrite agent system prompts. The host provides trusted task and lifecycle state; text inside an image cannot authorize retirement.
+The package does not supply or rewrite agent system prompts. Your agent must confirm whether a task is complete and an image is still needed. Text inside an image cannot authorize removing it from future requests.
 
 </details>
 
 <details>
 <summary><b>Can I add my own task rules?</b></summary>
 
-Yes, within your host. Register each image occurrence with source, version, stage and task metadata, then preserve required evidence. A completed read can still be needed for comparison, quality, relation or action. [Decision rules](docs/GUIDE.md#what-happens-on-every-turn)
+Yes, in your agent. Each time you attach an image, record its source, version, task stage and purpose, and mark images that must be kept. Even after reading an image, you may still need it to compare versions, check quality, understand positions or take an action. [Decision rules](docs/GUIDE.md#what-happens-on-every-turn)
 
 </details>
 
 <details>
 <summary><b>Can I use this for free?</b></summary>
 
-First-party code and docs are [MIT-licensed](LICENSE). The offline demo makes no model calls. A later host integration may incur its own provider, storage or infrastructure costs.
+Code and docs written for this project are [MIT-licensed](LICENSE). The offline demo makes no model calls. Connecting your agent may incur model, storage or running costs.
 
 </details>
 
 <details>
 <summary><b>What are the license terms?</b></summary>
 
-The root MIT license covers first-party code. Browser Use-derived documentation diagrams retain their [MIT attribution](docs/images/reference/ATTRIBUTION.md); research patches have separate upstream terms in [NOTICE](NOTICE).
+The MIT license in the repository root covers code written for this project. Browser Use-derived documentation diagrams retain their [MIT attribution](docs/images/reference/ATTRIBUTION.md); research patches have separate upstream terms in [NOTICE](NOTICE).
 
 </details>
 
 <details>
 <summary><b>How do I handle private screenshots?</b></summary>
 
-Keep the original store, metadata and host credentials under your own access controls and retention policy. Originals preserve encoding and EXIF. The demo uses synthetic inputs only; do not publish your private request artifacts.
+Decide who can access saved originals, image records and agent login details, and how long to keep them. Originals retain their file encoding and EXIF information (such as capture time and location). The demo uses synthetic images only; do not publish request files containing private material.
 
 </details>
 
 <details>
 <summary><b>Does it automatically recognize completed tasks or summarize images?</b></summary>
 
-No. The host declares lifecycle and supplies actual result fields. Receipt validation does not prove truth or sufficient meaning. Automatic OCR, summarization, crop selection and subagent dispatch are outside this component.
+No. Your agent must mark task states and supply results from completed tasks. ICM checks the result format and image source, but cannot tell whether a result is correct or contains enough information. It does not automatically read image text, summarize images, choose crop regions or assign subagents.
 
 </details>
 
 <details>
 <summary><b>How do I go into production?</b></summary>
 
-Start with the offline fixture, implement the contract in an isolated host, then verify real outgoing requests, retries, recall and task quality. Default Codex integration, arbitrary-task benefit and WS image-retirement stability remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-harness)
+Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. Default Codex integration, benefits for other tasks and stability when replacing historical images over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-harness)
 
 </details>
 
 <details>
-<summary><b>Can I bring back a retired image without losing the original?</b></summary>
+<summary><b>Can I retrieve an image after replacing it in requests?</b></summary>
 
-Yes. Rebuild comparison requests from canonical history, or use `manager.recall(use)` to verify original bytes, then attach and register a fresh protected occurrence. Retirement changes a request copy; it does not delete the canonical history or original store. [Walkthrough](src/image_context_manager/demo.py)
+Yes. Rebuild comparison requests from the full original conversation, or use `manager.recall(use)` to check the retrieved file matches the original. Then attach it again and mark it as an image to keep. Replacing an image only changes the outgoing request; it does not delete the original conversation or saved image. [Walkthrough](src/image_context_manager/demo.py)
 
 </details>
 
@@ -291,13 +291,13 @@ Yes. Rebuild comparison requests from canonical history, or use `manager.recall(
 
 | Component | What it's for |
 | --- | --- |
-| [HistoricalImages](src/image_context_manager/history.py) | Request-time image lifecycle registry and plans. |
-| [AssetStore](src/image_context_manager/core.py) | Store originals and verify exact recall. |
-| [Offline Demo](src/image_context_manager/demo.py) | Inspect synthetic retirement, comparison and recall. |
+| [HistoricalImages](src/image_context_manager/history.py) | Track image uses and states, and choose which images to send. |
+| [AssetStore](src/image_context_manager/core.py) | Save originals and check retrieved files match exactly. |
+| [Offline Demo](src/image_context_manager/demo.py) | Try replacing, comparing and retrieving synthetic images. |
 | [Python Example](examples/offline_demo.py) | Run the installed package from source. |
-| [Host Contract](docs/INTEGRATION.md) | Connect canonical history and trusted host state. |
-| [Codex Research Adapter](experiments/codex/README.md) | Historical isolated HTTP source patch; research only. |
-| [Transport Diagnostics](experiments/websocket-diagnostics/README.md) | Metadata and unresolved size-related WS rejection. |
+| [Integration Requirements](docs/INTEGRATION.md) | Define the history, image information and task states your agent must provide. |
+| [Codex Research Adapter](experiments/codex/README.md) | Codex source changes used in earlier HTTP experiments; research only. |
+| [Transport Diagnostics](experiments/websocket-diagnostics/README.md) | Connection test records and unresolved WebSocket disconnections for large messages. |
 
 <br/>
 
