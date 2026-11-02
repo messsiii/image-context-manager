@@ -1,6 +1,6 @@
 # Harness integration contract
 
-[完整中文契约](INTEGRATION.zh-CN.md)
+[Back to README](../README.md) · [完整中文契约](INTEGRATION.zh-CN.md)
 
 The harness must own complete canonical image history and the final outgoing request. Generating a plan alone changes no network traffic. This library does not call a provider or stop another host from appending hidden original history.
 

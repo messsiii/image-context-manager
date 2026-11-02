@@ -1,5 +1,7 @@
 # 宿主接入契约
 
+[返回 README](../README.zh-CN.md) · [English contract](INTEGRATION.md)
+
 组件没有网络客户端，也不管理 agent 会话。宿主应在**每次最终请求构建前**从可信 canonical 历史取得完整附件清单，计算计划并实际变换请求副本；只生成计划或删聊天附件，不代表模型下一次请求已经改变。
 
 ## 宿主必须提供
