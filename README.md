@@ -109,9 +109,19 @@ Our initial image-task categories are **reading content, locating targets, recog
 
 ### Accumulating image history: five A/B pairs, 70 turns
 
-**This was a synthetic-task experiment in an isolated Codex HTTP setup, not a real ASC speedup from installing the skill.** A kept original-image history; B replaced eligible old images in later requests with results from completed tasks. The experiment driver supplied task stages.
+**Question tested: can replacing old images from completed tasks with text findings reduce traffic and elapsed time while keeping answers correct?**
 
-Each pair used two independent conversations, each running seven turns: draft reading → version comparison → upload state → version selection → submission state → recall comparison → final check. All five pairs completed.
+The experiment called the model through real Codex sessions, using synthetic images and an isolated HTTP configuration. It did not log in to ASC, upload assets or submit an app. Each A/B pair started with empty histories, the same materials, questions and model settings, and ran seven consecutive turns:
+
+| Stage | A: original-image history | B: task-based history handling |
+| --- | --- | --- |
+| New images | Send originals | Send the same originals |
+| Old images from completed tasks | Keep sending them in later turns | Replace them with completed-task text results when preset conditions are met |
+| Later inspection | Inspect originals in history | Retrieve originals when needed |
+
+The seven turns were **draft reading → version comparison → upload state → version selection → submission state → recall comparison → final check**. Upload and submission states were image-reading questions, not real backend actions. The experiment driver specified task completion and image-retirement conditions; autonomous agent decisions about those conditions were not tested.
+
+All five independent A/B pairs, ten sessions and 70 turns completed. Failed attempts were not selectively discarded. Quality used preset answer checks for every turn; timing measured both time to first token and the full seven-turn workflow.
 
 | Metric | A: original-image history | B: task-based history handling | Change |
 | --- | --- | --- | --- |
@@ -120,6 +130,8 @@ Each pair used two independent conversations, each running seven turns: draft re
 | Answer checks passed | 35 / 35 | 35 / 35 | All checks passed in this set |
 
 Median per-turn time to first token fell by 31.2%. Workflow time includes preparation and processing, excluding fixed observation waits. Send totals are process network counters including startup, control traffic, TLS, retries and fallback. MB means 1,000,000 bytes; these are not image-file sizes or token counts. Cost savings were not measured. [Original aggregate](experiments/http-results.json) · [Setup and provenance](experiments/README.md)
+
+**Scope of the result: the mechanism worked under these synthetic experiment conditions; this does not establish a real Computer Use speedup after installing the skill.** A real-workflow comparison still needs to include autonomous decisions, image processing, visual workers, recall, retries and cache changes.
 
 ### Large image requests: retries can multiply the overhead
 
