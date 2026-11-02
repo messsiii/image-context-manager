@@ -91,7 +91,7 @@ python3 -m venv .venv
 .venv/bin/icm-demo --out run-data/first
 ```
 
-[Read the generated report and request files ↗](docs/GUIDE.md#try-the-offline-loop)
+[Read the generated report and request files ↗](docs/GUIDE.md#run-the-offline-demo)
 
 No model account or API key is needed. Installation may download dependencies; the demo itself is offline. Use a new output directory each time.
 
@@ -163,7 +163,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 ICM checks the result format and which original image it belongs to. It cannot tell whether the result is correct or enough for the next step; your agent must confirm that. With the right state labels, images that are current, protected, needed for comparison or awaiting checks stay in the request.
 
-[Integration requirements ↗](docs/INTEGRATION.md) · [Windows command paths ↗](docs/GUIDE.md#try-the-offline-loop)
+[Integration requirements ↗](docs/INTEGRATION.md) · [Windows command paths ↗](docs/GUIDE.md#run-the-offline-demo)
 
 <br/>
 
@@ -274,7 +274,7 @@ No. Your agent must mark task states and supply results from completed tasks. IC
 <details>
 <summary><b>How do I go into production?</b></summary>
 
-Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. Default Codex integration, benefits for other tasks and stability when replacing historical images over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-harness)
+Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. Default Codex integration, benefits for other tasks and stability when replacing historical images over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-agent)
 
 </details>
 

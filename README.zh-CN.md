@@ -91,7 +91,7 @@ python3 -m venv .venv
 .venv/bin/icm-demo --out run-data/first
 ```
 
-[查看生成的报告与请求文件 ↗](docs/GUIDE.zh-CN.md#跑通离线闭环)
+[查看生成的报告与请求文件 ↗](docs/GUIDE.zh-CN.md#运行离线示例)
 
 无需模型账号或 API 密钥。安装可能联网下载依赖，示例本身离线运行。每次选择新的输出目录。
 
@@ -163,7 +163,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 
 ICM 会检查任务结果的格式及其对应的原图，但不能判断结果是否正确、是否足够完成下一步；这需要你的 agent 程序确认。只要状态标记正确，当前使用、需要比较、待核对或明确要求保留的图片就会继续发送。
 
-[接入要求 ↗](docs/INTEGRATION.zh-CN.md) · [Windows 运行命令 ↗](docs/GUIDE.zh-CN.md#跑通离线闭环)
+[接入要求 ↗](docs/INTEGRATION.zh-CN.md) · [Windows 运行命令 ↗](docs/GUIDE.zh-CN.md#运行离线示例)
 
 <br/>
 
@@ -274,7 +274,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 <details>
 <summary><b>如何投入生产使用？</b></summary>
 
-先跑离线示例，再按接入要求接到独立测试用的 agent 程序，检查实际发送内容、失败重试、取回原图和任务结果是否正确。默认 Codex 接入、其他任务是否受益，以及通过 WebSocket 替换历史图片的稳定性，尚未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的宿主适合接入吗)。
+先跑离线示例，再按接入要求接到独立测试用的 agent 程序，检查实际发送内容、失败重试、取回原图和任务结果是否正确。默认 Codex 接入、其他任务是否受益，以及通过 WebSocket 替换历史图片的稳定性，尚未验证。[适用性与边界](docs/GUIDE.zh-CN.md#你的-agent-适合接入吗)。
 
 </details>
 

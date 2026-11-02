@@ -1,33 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="600" height="814" viewBox="0 0 600 814" role="img" aria-labelledby="title desc">
 <title id="title">旧草稿 → 当前稿 → 对比 → 继续</title>
-<desc id="desc">概念示例，不是性能数据：A的读取任务结束并满足条件后转引用，B作为当前稿保留；比较时恢复两图，继续前更新状态并重新检查。</desc>
+<desc id="desc">说明示例，不是性能数据：读完草稿 A 并通过检查后用文字替换，保留当前稿 B；比较时恢复两图，继续前更新状态并重新检查。</desc>
 <style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17283b}.title{font-size:28px;font-weight:700}.label{font-size:26px;font-weight:650}.body{font-size:26px}</style>
 <rect width="600" height="814" rx="16" fill="#f5f8fb"/>
 <text class="title" x="28" y="48">旧草稿 → 当前稿 → 对比 → 继续</text>
 <rect x="24" y="80" width="552" height="124" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
 <rect x="24" y="80" width="6" height="124" rx="3" fill="#71562e"/>
 <text class="label" x="44" y="116">1 · 读取草稿 A</text>
-<text class="body" x="44" y="154">请求：A 的像素。</text>
-<text class="body" x="44" y="186">宿主核验并记录读取结果。</text>
+<text class="body" x="44" y="154">请求：图片 A。</text>
+<text class="body" x="44" y="186">你的 agent 核对并记录读取结果。</text>
 <path d="M300 210 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
 <rect x="24" y="234" width="552" height="124" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
 <rect x="24" y="234" width="6" height="124" rx="3" fill="#285d8c"/>
 <text class="label" x="44" y="270">2 · 检查当前稿 B</text>
-<text class="body" x="44" y="308">A 读取完成，全部资格检查通过。</text>
-<text class="body" x="44" y="340">请求：A 的引用 + B 的像素。</text>
+<text class="body" x="44" y="308">A 读取完成，全部替换检查通过。</text>
+<text class="body" x="44" y="340">请求：A 的文字 + 图片 B。</text>
 <path d="M300 364 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
 <rect x="24" y="388" width="552" height="124" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
 <rect x="24" y="388" width="6" height="124" rx="3" fill="#71562e"/>
 <text class="label" x="44" y="424">3 · 比较 A 与 B</text>
-<text class="body" x="44" y="462">宿主为两图声明比较任务。</text>
-<text class="body" x="44" y="494">重建请求：A 的像素 + B 的像素。</text>
+<text class="body" x="44" y="462">你的 agent 标记两图用于比较。</text>
+<text class="body" x="44" y="494">重新组装请求：图片 A + 图片 B。</text>
 <path d="M300 518 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
 <rect x="24" y="542" width="552" height="156" rx="12" fill="#ffffff" stroke="#cbd6e1"/>
 <rect x="24" y="542" width="6" height="156" rx="3" fill="#285d8c"/>
 <text class="label" x="44" y="578">4 · 比较结束后继续</text>
-<text class="body" x="44" y="616">宿主结束比较，更新用途与状态。</text>
-<text class="body" x="44" y="648">重新检查：A 满足条件才可转引用；</text>
-<text class="body" x="44" y="680">B 仍需使用时保留像素。</text>
+<text class="body" x="44" y="616">你的 agent 结束比较，更新任务。</text>
+<text class="body" x="44" y="648">重新检查：A 满足条件才可转文字；</text>
+<text class="body" x="44" y="680">B 仍需使用时保留图片。</text>
 <text class="body" x="28" y="728">仅为概念示意，不代表实测收益。</text>
-<text class="body" x="28" y="760">任何待核验证据都继续保留像素。</text>
+<text class="body" x="28" y="760">仍需核对的图片都继续保留。</text>
 </svg>
