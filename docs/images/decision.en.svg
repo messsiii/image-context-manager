@@ -21,7 +21,7 @@
 <rect x="24" y="420" width="6" height="188" rx="3" fill="#285d8c"/>
 <text class="label" x="44" y="456">3 · Check older images you can replace</text>
 <text class="body" x="44" y="494">Finished / invalidated and confident?</text>
-<text class="body" x="44" y="526">Source, version, stage and results match?</text>
+<text class="body" x="44" y="526" style="font-size:24px">Source/version/stage/binding/results match?</text>
 <text class="body" x="44" y="558">Your agent confirms results are enough?</text>
 <text class="body" x="44" y="590">ALL yes → TEXT; otherwise → IMAGE.</text>
 <path d="M300 614 v18 m-6 -6 6 6 6 -6" fill="none" stroke="#718497" stroke-width="3"/>
