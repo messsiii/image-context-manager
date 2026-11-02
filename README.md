@@ -8,7 +8,7 @@
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/tagline-en-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tagline-en-dark.svg">
-  <img alt="Manage images across agent turns." src="docs/images/reference/tagline-en-light.svg" width="400">
+  <img alt="Manage images for your agent." src="docs/images/reference/tagline-en-light.svg" width="400">
 </picture>
 </div>
 
