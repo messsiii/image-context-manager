@@ -1,5 +1,7 @@
 # 接入要求
 
+> **Claude Code / Codex 用户：** 新增 [skill 和本地工具安装方式](AGENT-SETUP.zh-CN.md)，包含压缩、裁剪、结果保存、召回与原生子 agent 交接。下面的请求组装说明面向自己控制请求的 Python 程序。
+
 [返回 README](../README.zh-CN.md) · [English integration requirements](INTEGRATION.md)
 
 你的 agent 程序需要保存完整原始对话，并能决定最终向模型发送哪些内容。ICM 在请求副本上处理图片，不调用模型，也不管理 agent 会话。只有你的程序应用处理计划并发送修改后的请求，网络流量才会改变。ICM 无法阻止其他代码在处理后又把原图加回去。

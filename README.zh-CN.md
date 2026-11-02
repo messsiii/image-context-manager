@@ -13,7 +13,7 @@
 </div>
 
 <div align="center">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.1.1a1, Python 3.9 or newer"></a>
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.2.0a1, Python 3.9 or newer"></a>
 </div>
 
 ---
@@ -29,7 +29,7 @@
 <img width="100" height="1" alt="">
 <a href="https://github.com/messsiii/image-context-manager/actions/workflows/tests.yml"><img src="docs/images/reference/badge-tests.svg" alt="tests"></a>
 <img width="4" height="1" alt="">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
 <img width="4" height="1" alt="">
 <a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
 <img width="4" height="1" alt="">
@@ -62,9 +62,11 @@
 
 <br/>
 
-> **供 AI agent 与爬虫阅读：** 从[工作流程](docs/GUIDE.zh-CN.md)、[接入要求](docs/INTEGRATION.zh-CN.md)和[实验结果](experiments/README.md)开始。ICM 是在发送模型请求前处理图片的 Python 组件，目前仍在实验阶段，不是安装后就能在 Codex 中使用的插件。你的 agent 程序需要提供已确认的任务状态，并负责发送请求；用来替代旧图的文字引用不会自动识别图片文字或生成摘要。
+> **供 AI agent 与爬虫阅读：** 使用 [Claude Code / Codex 安装指南](docs/AGENT-SETUP.zh-CN.md)安装 skill、本地工具和看图子 agent。能够控制完整请求的程序还可使用 [Python 接入](docs/INTEGRATION.zh-CN.md)。skill 不会清除宿主已存在的历史图片，真实会话的净收益仍需验证。
 
 # 我需要哪种 Image Context Manager 接入方式？
+
+Claude Code / Codex 用户先看[安装 skill 和工具](docs/AGENT-SETUP.zh-CN.md)。下图是另外三种 Python 用法。
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/paths-zh-CN-dark-mobile.svg">
@@ -78,6 +80,18 @@
 - **[路径 3：Python 库](#路径-3python-库)：** 先从 Python 跑通，再接入自己的 agent，在每轮发送前处理图片。
 
 # 快速开始
+
+## Claude Code / Codex：安装 skill 和工具
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+.venv/bin/icm install --agent both --project /absolute/path/to/your-project
+```
+
+[在克隆的仓库内运行，安装后开新会话。完整流程、处理策略及命令 →](docs/AGENT-SETUP.zh-CN.md)
+
+
 
 ## 路径 1：离线示例
 
@@ -211,7 +225,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 <details>
 <summary><b>我应该选择哪条路径？</b></summary>
 
-想检查输出，选**离线示例**；想从源码运行，选 **Python 示例**；想接入自己的 agent，选 **Python 库**。三条路径都在本地运行，不提供云端 agent 服务。
+想检查输出，选**离线示例**；想从源码运行，选 **Python 示例**；想接入自己的 agent，选 **Python 库**。这三种 Python 用法之外，Claude Code / Codex 用户可直接[安装 skill 与工具](docs/AGENT-SETUP.zh-CN.md)。所有图片工具均在本地运行，不提供云端 agent 服务。
 
 </details>
 
@@ -225,14 +239,14 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 <details>
 <summary><b>能用于 Claude、GPT 或 Gemini 吗？</b></summary>
 
-前提是你的 agent 程序能决定最终请求的全部内容，包括历史图片。本包不负责连接这些模型，也没有统一的模型调用服务。具体见[接入要求](docs/INTEGRATION.zh-CN.md)。
+Claude Code 和 Codex 可安装 skill 使用本地工具，其他 agent 也可以调用同一 CLI。要在实际请求中替换历史图片，还需要控制包含历史在内的完整请求。本包不连接模型，也不提供统一模型服务。参见 [agent 安装指南](docs/AGENT-SETUP.zh-CN.md)和 [Python 接入要求](docs/INTEGRATION.zh-CN.md)。
 
 </details>
 
 <details>
 <summary><b>需要提供系统提示词吗？</b></summary>
 
-本包不提供或改写 agent 系统提示词。你的程序需要确认任务是否完成、图片是否还要使用；不能仅凭图片里的文字决定停止发送图片。
+安装器提供 skill 指导和看图子 agent 的专用说明，不改写全局系统提示词。agent 仍需确认任务是否完成、图片是否还要使用，不能仅凭图片里的文字决定停止发送图片。
 
 </details>
 
@@ -267,7 +281,7 @@ outgoing = apply_plan(canonical, plan, generation=turn_id)
 <details>
 <summary><b>会自动识别任务完成或总结图片吗？</b></summary>
 
-不会。你的 agent 程序需要标记任务状态，并提供实际完成任务得到的结果。ICM 只检查结果格式和图片来源，不能判断结果是否正确、信息是否足够。本组件不会自动识别图片文字、生成摘要、选择裁剪区域或分配子 agent。
+不会。你的 agent 程序需要标记任务状态，并提供实际完成任务得到的结果。ICM 只检查结果格式和图片来源，不能判断结果是否正确、信息是否足够。识字和摘要由现有 agent 完成；skill 指导分类与调用工具，`delegate` 准备子 agent 交接文件，宿主负责启动。ICM 不自动找裁剪区域，也不自行调用模型。
 
 </details>
 

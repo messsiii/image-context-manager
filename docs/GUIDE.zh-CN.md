@@ -1,5 +1,7 @@
 # Image Context Manager — 使用指南
 
+> **Claude Code / Codex 用户：** 新增 [skill 和本地工具安装方式](AGENT-SETUP.zh-CN.md)，包含压缩、裁剪、结果保存、召回与原生子 agent 交接。下面的请求组装说明面向自己控制请求的 Python 程序。
+
 [返回 README](../README.zh-CN.md) · [English guide](GUIDE.md)
 
 **保留 agent 仍然需要的图片；已有任务结果足够时，再用文字替换旧图，需要时再取回原图。**
@@ -80,8 +82,8 @@ python3 -m venv .venv
 | 保留图片 | 正确标记后，保留当前或仍需使用的图片 |
 | 通过检查后，用文字替换旧图 | `HistoricalImages` 使用与原图对应的任务结果记录，不自动识别图片文字或生成摘要 |
 | 单独保存和取回原图 | `AssetStore` 保存原图，用 SHA-256 检查取回文件是否完全一致；由你的 agent 发起取回 |
-| 降低分辨率 / 裁剪 | 早期 `RequestAssembler` / `Policy` 实验接受手动指定的缩略图和裁剪区域，规则独立；默认处理方式不会自动选择 |
-| 识别任务 / 分派子 agent | 由你的 agent 实现；本库不自动识别任务或分配子 agent |
+| 降低分辨率 / 裁剪 | `icm prepare` 提供缩放 / JPEG 压缩、已核对区域的裁剪；skill 指导选择。Python 历史请求处理独立使用自己的规则 |
+| 识别任务 / 分派子 agent | skill 指导现有 agent 分类；安装器提供原生看图子 agent，`delegate` 准备交接文件，由宿主启动 |
 
 ## 在你的 agent 发送请求前处理图片
 

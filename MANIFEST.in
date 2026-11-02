@@ -5,3 +5,6 @@ recursive-include examples *.py
 recursive-include tools *.py
 include CONTRIBUTING.md
 recursive-include experiments *
+
+recursive-include src/image_context_manager/skill *.md *.py
+recursive-include docs *.svg *.png *.gif *.jpg

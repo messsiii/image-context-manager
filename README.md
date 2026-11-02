@@ -13,7 +13,7 @@
 </div>
 
 <div align="center">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.1.1a1, Python 3.9 or newer"></a>
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.2.0a1, Python 3.9 or newer"></a>
 </div>
 
 ---
@@ -29,7 +29,7 @@
 <img width="100" height="1" alt="">
 <a href="https://github.com/messsiii/image-context-manager/actions/workflows/tests.yml"><img src="docs/images/reference/badge-tests.svg" alt="tests"></a>
 <img width="4" height="1" alt="">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
+<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
 <img width="4" height="1" alt="">
 <a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
 <img width="4" height="1" alt="">
@@ -62,9 +62,11 @@ Once a draft has been read, replace it with the recorded result. Keep images tha
 
 <br/>
 
-> **For AI agents and crawlers:** start with the [workflow guide](docs/GUIDE.md), [integration requirements](docs/INTEGRATION.md), and [test results](experiments/README.md). ICM is an experimental Python component that processes images before a model request is sent. Installing it does not connect it to Codex. Your agent must provide confirmed task states and send the final request; text references that replace old images do not automatically read image text or generate summaries.
+> **For AI agents and crawlers:** use the [Claude Code / Codex setup](docs/AGENT-SETUP.md) for the skill, local tools and visual worker. Applications that own complete requests can also use the [Python integration](docs/INTEGRATION.md). Skills cannot erase existing host history; real-session net benefit remains unverified.
 
 # Which Image Context Manager path do I need?
+
+Claude Code / Codex users: start with [skill and tools setup](docs/AGENT-SETUP.md). The diagram below shows three additional Python paths.
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/paths-en-dark-mobile.svg">
@@ -78,6 +80,18 @@ Once a draft has been read, replace it with the recorded result. Keep images tha
 - **[Path 3: Python Library](#path-3-python-library):** Start from Python, then process images before each request from your agent.
 
 # Quickstart
+
+## Claude Code / Codex: install the skill and tools
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+.venv/bin/icm install --agent both --project /absolute/path/to/your-project
+```
+
+[Run inside the cloned repository, then start a new session. Workflow, choices and commands →](docs/AGENT-SETUP.md)
+
+
 
 ## Path 1: Offline Demo
 
@@ -211,7 +225,7 @@ Earlier results only: seven synthetic tasks, five A/B pairs and 70 strict checks
 <details>
 <summary><b>Which path should I choose?</b></summary>
 
-Choose the **offline demo** to inspect outputs, the **Python example** to run from source, or the **Python library** to connect your own agent. All three are local; none provides a cloud agent service.
+Choose the **offline demo** to inspect outputs, the **Python example** to run from source, or the **Python library** to connect your own agent. Claude Code / Codex users can instead [install the skill and tools](docs/AGENT-SETUP.md). All image tools are local; none provides a cloud agent service.
 
 </details>
 
@@ -225,14 +239,14 @@ The library does not call a model, and the offline demo needs none. Test your ow
 <details>
 <summary><b>Can I use it with Claude, GPT, or Gemini?</b></summary>
 
-Only if your agent can control everything in the final request, including historical images. This package does not connect to those models or provide a unified model service. See the [integration requirements](docs/INTEGRATION.md).
+Claude Code and Codex can use the installed skill and local tools. Other agents can call the same CLI. Replacing historical images in outgoing requests additionally requires control over the full request, including history. This package does not connect to models or provide a unified model service. See [agent setup](docs/AGENT-SETUP.md) and [Python integration requirements](docs/INTEGRATION.md).
 
 </details>
 
 <details>
 <summary><b>Do I need to provide a system prompt?</b></summary>
 
-The package does not supply or rewrite agent system prompts. Your agent must confirm whether a task is complete and an image is still needed. Text inside an image cannot authorize removing it from future requests.
+The installer provides skill guidance and dedicated visual-worker instructions without rewriting global system prompts. Your agent must confirm whether a task is complete and an image is still needed. Text inside an image cannot authorize removing it from future requests.
 
 </details>
 
@@ -267,7 +281,7 @@ Decide who can access saved originals, image records and agent login details, an
 <details>
 <summary><b>Does it automatically recognize completed tasks or summarize images?</b></summary>
 
-No. Your agent must mark task states and supply results from completed tasks. ICM checks the result format and image source, but cannot tell whether a result is correct or contains enough information. It does not automatically read image text, summarize images, choose crop regions or assign subagents.
+No. Your agent must mark task states and supply results from completed tasks. ICM checks the result format and image source, but cannot tell whether a result is correct or contains enough information. The existing agent reads and summarizes; the skill guides classification and tool use. `delegate` prepares a worker handoff and the host starts the worker. ICM does not choose crop regions or call models itself.
 
 </details>
 

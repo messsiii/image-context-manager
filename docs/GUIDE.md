@@ -1,5 +1,7 @@
 # Image Context Manager — usage guide
 
+> **Claude Code / Codex users:** the new [skill and local tools](AGENT-SETUP.md) provide compression, cropping, result storage, recall and native-worker handoffs. Request assembly below applies to Python applications that own their outgoing requests.
+
 [Back to README](../README.md) · [中文指南](GUIDE.zh-CN.md)
 
 **Keep images your agent still needs. Replace old images only when recorded task results are enough, and keep originals available.**
@@ -80,8 +82,8 @@ Reducing resolution, cropping, summarizing, using subagents and storing original
 | Keep the image | Keep current or still-needed images when their states are correctly marked |
 | Replace old images with text when checks pass | `HistoricalImages` uses recorded task results linked to originals; it does not automatically read image text or generate summaries |
 | Store and retrieve originals separately | `AssetStore` saves originals; SHA-256 checks that retrieved files match exactly. Your agent starts retrieval |
-| Lower resolution / crop | Earlier `RequestAssembler` / `Policy` experiments accept manually chosen thumbnails/crops and use separate rules; the default approach does not choose these automatically |
-| Detect tasks / delegate to subagents | Your agent must implement these; this library does not automatically detect tasks or assign subagents |
+| Lower resolution / crop | `icm prepare` resizes / JPEG-compresses or crops a verified region; the skill guides selection. Python history assembly uses its separate rules |
+| Detect tasks / delegate to subagents | The skill guides task classification; installation adds a native visual worker. `delegate` prepares a handoff, then the host starts the worker |
 
 ## Process images before your agent sends a request
 

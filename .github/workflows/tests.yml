@@ -20,3 +20,6 @@ jobs:
       - run: python -I tools/verify_install.py --tests tests --out run-data/ci-verification
       - run: icm-demo --out run-data/ci-cli-demo
       - run: python examples/offline_demo.py --out run-data/ci-python-demo
+      - run: icm install --agent both --project run-data/agent-project
+      - run: python run-data/agent-project/.agents/skills/image-context-manager/scripts/icm.py --workspace run-data/agent-workspace list
+      - run: python examples/agent_tools.py --out run-data/agent-tools-demo

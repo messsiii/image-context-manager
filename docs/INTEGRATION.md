@@ -1,5 +1,7 @@
 # Integration requirements
 
+> **Claude Code / Codex users:** the new [skill and local tools](AGENT-SETUP.md) provide compression, cropping, result storage, recall and native-worker handoffs. Request assembly below applies to Python applications that own their outgoing requests.
+
 [Back to README](../README.md) · [中文接入要求](INTEGRATION.zh-CN.md)
 
 Your agent program must keep the full original conversation and control the final request sent to the model. ICM works on a copy of that request. It does not call a model or manage agent sessions. Generating a plan does not change network traffic unless your program applies it and sends the changed request. ICM cannot stop other code from adding original images back afterward.

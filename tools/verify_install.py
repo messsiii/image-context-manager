@@ -37,7 +37,7 @@ record={'python':platform.python_version(),'platform':platform.system()+' '+plat
         'runtime_network_and_process_guard_enabled':True,'blocked_events':blocked,
         'tests_run':result.testsRun,'tests_passed':result.wasSuccessful(),
         'demo':report,
-        'installed_modules_sha256':{name:hashlib.sha256((installed_path.parent/name).read_bytes()).hexdigest() for name in ['core.py','history.py','local.py','demo.py']},
+        'installed_modules_sha256':{name:hashlib.sha256((installed_path.parent/name).read_bytes()).hexdigest() for name in ['core.py','history.py','local.py','demo.py','agent.py','cli.py']},
         'scope':'Same-implementer clean install validation; not independent developer reproduction, model/network benchmark, ASC or UI review'}
 (args.out/'verification.json').write_text(json.dumps(record,indent=2)+'\n')
 assert result.wasSuccessful() and not blocked
