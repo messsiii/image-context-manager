@@ -1,100 +1,19 @@
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-light.png">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-dark.png">
-  <img alt="Image Context Manager — original monochrome image-frame wordmark." src="docs/images/reference/wordmark-light.png" width="full">
+  <img alt="Image Context Manager" src="docs/images/reference/wordmark-light.png" width="100%">
 </picture>
 
-<div align="center">
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/tagline-en-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tagline-en-dark.svg">
-  <img alt="Manage images for your agent." src="docs/images/reference/tagline-en-light.svg" width="400">
-</picture>
-</div>
+[中文](README.zh-CN.md) · [Experimental release 0.2.0a1](https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1) · [MIT](LICENSE)
 
-<div align="center">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/status.svg" height="48" alt="Experimental preview 0.2.0a1, Python 3.9 or newer"></a>
-</div>
+# Help your agent handle images in long tasks
 
----
+When Claude Code or Codex takes screenshots, checks designs or compares image versions, images can accumulate in the conversation. Image Context Manager (ICM) gives the agent a **skill that explains how to handle them, plus local tools to do the work**.
 
-<div align="center">
-<a href="#keep-the-pixels-your-task-needs"><img src="docs/images/reference/badge-demos.svg" alt="demos"></a>
-<img width="16" height="1" alt="">
-<a href="docs/INTEGRATION.md"><img src="docs/images/reference/badge-docs.svg" alt="docs"></a>
-<img width="16" height="1" alt="">
-<a href="docs/GUIDE.md"><img src="docs/images/reference/badge-guide.svg" alt="guide"></a>
-<img width="16" height="1" alt="">
-<a href="src/image_context_manager"><img src="docs/images/reference/badge-code.svg" alt="code"></a>
-<img width="100" height="1" alt="">
-<a href="https://github.com/messsiii/image-context-manager/actions/workflows/tests.yml"><img src="docs/images/reference/badge-tests.svg" alt="tests"></a>
-<img width="4" height="1" alt="">
-<a href="https://github.com/messsiii/image-context-manager/releases/tag/v0.2.0a1"><img src="docs/images/reference/badge-preview.svg" alt="preview"></a>
-<img width="4" height="1" alt="">
-<a href="LICENSE"><img src="docs/images/reference/badge-license.svg" alt="license"></a>
-<img width="4" height="1" alt="">
-<a href="README.zh-CN.md"><img src="docs/images/reference/badge-language.svg" height="48" alt="language"></a>
-</div>
+The agent can crop a relevant region, compress an image, save checked findings as text, or ask a separate visual worker to inspect an image. Originals stay available for later checks.
 
-<br/>
+## Install
 
-<div align="center">
-  <a href="docs/GUIDE.md">
-    <img src="docs/images/reference/canyon.jpg" alt="Original surreal illustration: a copper-green image frame bridges an orange canyon. A tiny person crosses it." width="720">
-  </a>
-</div>
-
-<div align="center">
-
-Image-handling skills and local tools for Claude Code and Codex. Choose compression, crops, text results or originals for the task, or delegate inspection to a visual worker that returns text. [Install and use →](docs/AGENT-SETUP.md)
-
-</div>
-
-<br/>
-
-# Keep the pixels your task needs.
-
-Choose what this step needs: crop a verified region, compress when detail loss is acceptable, and save text results after checking a completed task. Keep originals for comparison or verification. The skill manages future input; it cannot erase existing host-history images. The animation below demonstrates separate Python request handling.
-
-![Offline synthetic demo replay: actual local request artifacts move from 3 images to 2, then back to 3 for comparison and recall. No model or ASC session.](docs/images/reference/demo-en.gif)
-
-[Explore the offline walkthrough and task decisions ↗](docs/GUIDE.md)
-
-<br/>
-
-> **For AI agents and crawlers:** use the [Claude Code / Codex setup](docs/AGENT-SETUP.md) for the skill, local tools and visual worker. Applications that own complete requests can also use the [Python integration](docs/INTEGRATION.md). Skills cannot erase existing host history; real-session net benefit remains unverified.
-
-# What it does
-
-| Capability | How it works |
-|---|---|
-| Choose a representation | The skill guides the agent using purpose, task stage and verification; there is no fixed compression sequence |
-| Compress and crop | Local tools resize / JPEG-compress or crop a verified region while retaining originals |
-| Save text results | Your existing agent reads, summarizes and verifies; tools bind the result to its original, version and stage |
-| Use a visual worker | Prepare a handoff, then let the host invoke a separate visual worker; the main conversation receives text |
-| Store and recall | Persist images and results across restarts; check original hashes on retrieval |
-| Process historical requests | For programs that own complete requests, the Python library replaces eligible old images |
-
-**Validation:** 27 tests and Python 3.9 / 3.12 CI pass. A Codex functional session exercised worker inspection, text-result reuse and original recall. Claude Code's actual session remains unverified because of local account status; real multi-turn net benefit has not passed acceptance. [Release validation](docs/VALIDATION.md)
-
-# Which Image Context Manager path do I need?
-
-Claude Code / Codex users: start with [skill and tools setup](docs/AGENT-SETUP.md). The diagram below shows three additional Python paths.
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/paths-en-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="docs/images/reference/paths-en-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/paths-en-dark.svg">
-  <img alt="Three local paths: offline demo, Python source example and Python library for your agent. Each keeps request copies and originals; no cloud product." src="docs/images/reference/paths-en-light.svg" width="100%">
-</picture>
-
-- **[Path 1: Offline Demo](#path-1-offline-demo):** Inspect local request copies without a model or API key.
-- **[Path 2: Python Example](#path-2-python-example):** Run the source example from your checkout.
-- **[Path 3: Python Library](#path-3-python-library):** Start from Python, then process images before each request from your agent.
-
-# Quickstart
-
-## Claude Code / Codex: install the skill and tools
+Requires Python 3.9+ and Claude Code or Codex. Run in a terminal:
 
 ```sh
 git clone https://github.com/messsiii/image-context-manager.git
@@ -104,262 +23,54 @@ python3 -m venv .venv
 .venv/bin/icm install --agent both --project /absolute/path/to/your-project
 ```
 
-[Run inside the cloned repository, then start a new session. Workflow, choices and commands →](docs/AGENT-SETUP.md)
+Replace `/absolute/path/to/your-project` with the project where you use your agent. Choose `--agent codex`, `--agent claude` or `--agent both`.
 
-## Path 1: Offline Demo
+This installs the skill and a visual-worker definition into that project. Keep this repository and its `.venv` at the same location: the installed tools use that Python environment. No additional model API, server or cloud storage is needed; your agent uses its existing account.
 
-Use synthetic images to try keeping, replacing and retrieving images locally. Python 3.9+ is required; this preview installs from source, not PyPI.
+## Use it
 
-```sh
-git clone https://github.com/messsiii/image-context-manager.git
-cd image-context-manager
-python3 -m venv .venv
-.venv/bin/python -m pip install .
-.venv/bin/icm-demo --out run-data/first
+Start a **new Claude Code or Codex session in your project**, then ask:
+
+> Use image-context-manager for screenshots and visual assets in this task. Prefer text when it is sufficient. Keep originals; crop or compress only when the task permits. Use a visual worker for image inspection when available, and return text findings to the main conversation.
+
+For example, while preparing App Store screenshots:
+
+1. The agent saves each original and records its version and purpose.
+2. To read a caption, it can inspect a verified crop; to compare layouts or judge visual quality, it keeps the original.
+3. A visual worker can inspect the images in its own conversation and return findings as text.
+4. After the findings are checked and sufficient, the agent can reuse that text for later steps. If you ask to compare versions again, it retrieves the originals.
+
+You do not need to choose a Python integration or run an offline demo to start using the skill. The agent calls the bundled tools.
+
+## How it chooses what to keep
+
+```mermaid
+flowchart TD
+  A[Use text when sufficient] --> B[Otherwise save the original]
+  B --> C[Choose original, crop or compression]
+  C --> D[Agent or visual worker inspects]
+  D --> E[Save checked findings as text]
+  E --> F[Retrieve original for later checks]
 ```
 
-[Read the generated report and request files ↗](docs/GUIDE.md#run-the-offline-demo)
+There is no fixed “compress everything” rule. A small image may stay unchanged. Reading and summarizing are done by your existing agent; crop regions must be identified and checked by the agent. The tools handle the files, preserve originals, and associate findings with the correct source and version. A visual worker requires native subagent support in your agent.
 
-No model account or API key is needed. Installation may download dependencies; the demo itself is offline. Use a new output directory each time.
+## What works today — and what does not
 
-<br/>
-
-## Path 2: Python Example
-
-After installing from the checkout above, run the same demo through the source entry point:
-
-```sh
-.venv/bin/python examples/offline_demo.py --out run-data/example
-```
-
-[Source entry point ↗](examples/offline_demo.py) · [Full walkthrough implementation ↗](src/image_context_manager/demo.py)
-
-<br/>
-
-## Path 3: Python Library
-
-Use the library from your own Python code. The bundled demo provides a small first run before connecting real task states from your agent:
-
-**1. Install Image Context Manager (Python >= 3.9):**
-
-Use the source checkout and virtual environment in Path 1, then activate it:
-
-```sh
-source .venv/bin/activate
-```
-
-**2. Choose a new local output directory:**
-
-```text
-run-data/library
-```
-
-The demo uses synthetic images and task-completion events explicitly marked by the demo program. It does not call a model or read your private screenshots.
-
-**3. Save this as `try_icm.py`:**
-
-```python
-from pathlib import Path
-from image_context_manager.demo import run
-
-report = run(Path("run-data/library"))
-print(report["image_counts"])
-print("History intact:", report["canonical_history_preserved"])
-print("Exact recall:", report["original_recalled_byte_exact"])
-```
-
-**4. Run it:**
-
-```sh
-python try_icm.py
-```
-
-The local files show `initial: 3 → retired: 2 → comparison: 3 → recall: 3`. The animation above replays these saved files; it is not a recorded model or ASC run.
-
-**5. Process images before your agent sends each request:**
-
-Keep the full original conversation in your agent and record each image’s purpose and confirmed task state. Register the images carried directly in the request and save results after tasks actually finish. ICM can then choose which old images to replace with text. Check the changed request before sending it to the model:
-
-```python
-# Inside your agent, after registering images and confirming task states:
-manager.bind_request(inspect_images(canonical))
-plan, decisions = manager.plan(turn_id, states, current_start=current_start)
-outgoing = apply_plan(canonical, plan, generation=turn_id)
-# Your agent checks outgoing and sends it to the model service.
-```
-
-ICM checks the result format and which original image it belongs to. It cannot tell whether the result is correct or enough for the next step; your agent must confirm that. With the right state labels, images that are current, protected, needed for comparison or awaiting checks stay in the request.
-
-[Integration requirements ↗](docs/INTEGRATION.md) · [Windows command paths ↗](docs/GUIDE.md#run-the-offline-demo)
-
-<br/>
-
-# Python integration: process historical images in a request copy
-
-This additional integration is for Python programs that control complete requests. For Claude Code / Codex skills and local tools, use the [setup guide](docs/AGENT-SETUP.md).
-
-Your agent supplies all images from the conversation and their confirmed usage states. ICM works on a copy of the request, leaving the original conversation intact. Originals stay available for comparison or retrieval; SHA-256 checks confirm retrieved files match exactly. Your agent still checks the final format and sends the request.
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-en-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="docs/images/reference/architecture-en-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/architecture-en-dark.svg">
-  <img alt="Your agent supplies conversation history and confirmed task states. ICM checks a copy of the request and keeps originals; your agent sends the final request." src="docs/images/reference/architecture-en-light.svg" width="100%">
-</picture>
-
-This Python example format supports text and PNG/JPEG images embedded directly in requests; remote image links and tool-returned images are unsupported. It does not automatically read image text or provide an interface for rewriting default Codex history. The snippet below requires images to be registered in your agent first; see the [integration requirements](docs/INTEGRATION.md) for the inputs.
-
-```python
-from image_context_manager import apply_plan, inspect_images
-
-# manager has registered images; states holds confirmed image uses and states
-manager.bind_request(inspect_images(canonical))
-plan, decisions = manager.plan(turn_id, states, current_start=current_start)
-outgoing = apply_plan(canonical, plan, generation=turn_id)
-# Check the outgoing images; do not append the full original history again.
-```
-
-[Runnable walkthrough ↗](examples/offline_demo.py) · [Integration docs ↗](docs/INTEGRATION.md)
-
-<br/>
-
-# Image Context Manager HTTP performance test
-
-<img alt="Earlier synthetic-task results from a separate HTTP test environment. Both groups passed 35 of 35 strict checks. Optimized/original ratios: total network bytes sent 0.3095, median time to first output 0.6881, median full-workflow time 0.7291. These are not token or billing savings." src="docs/images/reference/benchmark-en.jpg" width="100%">
-
-Earlier results only: seven synthetic tasks, five A/B pairs and 70 strict checks in a separately run Codex HTTP test program. Both groups passed 35/35. Optimized / original ratios: total network bytes sent **0.3095**, median time to first output per turn (TTFT) **0.6881**, and median full-workflow time (E2E) **0.7291**. Network totals include startup, encrypted connections (TLS), retries and fallback connections; the two timing measures are reported separately. These results do not establish benefits for default Codex, real App Store Connect (ASC) tasks or other workflows, and do not verify billing savings. WebSocket disconnections for oversized messages (close code 1009) remain unresolved. [Results and test details ↗](experiments/README.md)
-
-## When to keep or replace images, how to integrate and retrieve originals, and more in the [Docs ↗](docs/GUIDE.md)
-
-<br/>
-
-# FAQ
-
-<details>
-<summary><b>Which path should I choose?</b></summary>
-
-Choose the **offline demo** to inspect outputs, the **Python example** to run from source, or the **Python library** to connect your own agent. Claude Code / Codex users can instead [install the skill and tools](docs/AGENT-SETUP.md). All image tools are local; none provides a cloud agent service.
-
-</details>
-
-<details>
-<summary><b>What is the best model to use?</b></summary>
-
-The library does not call a model, and the offline demo needs none. Test your own agent and tasks to find out whether performance improves. [Existing results](experiments/README.md) cover one synthetic workflow in a separate test environment.
-
-</details>
-
-<details>
-<summary><b>Can I use it with Claude, GPT, or Gemini?</b></summary>
-
-Claude Code and Codex can use the installed skill and local tools. Other agents can call the same CLI. Replacing historical images in outgoing requests additionally requires control over the full request, including history. This package does not connect to models or provide a unified model service. See [agent setup](docs/AGENT-SETUP.md) and [Python integration requirements](docs/INTEGRATION.md).
-
-</details>
-
-<details>
-<summary><b>Do I need to provide a system prompt?</b></summary>
-
-The installer provides skill guidance and dedicated visual-worker instructions without rewriting global system prompts. Your agent must confirm whether a task is complete and an image is still needed. Text inside an image cannot authorize removing it from future requests.
-
-</details>
-
-<details>
-<summary><b>Can I add my own task rules?</b></summary>
-
-Yes, in your agent. Each time you attach an image, record its source, version, task stage and purpose, and mark images that must be kept. Even after reading an image, you may still need it to compare versions, check quality, understand positions or take an action. [Decision rules](docs/GUIDE.md#what-happens-on-every-turn)
-
-</details>
-
-<details>
-<summary><b>Can I use this for free?</b></summary>
-
-Code and docs written for this project are [MIT-licensed](LICENSE). The offline demo makes no model calls. Connecting your agent may incur model, storage or running costs.
-
-</details>
-
-<details>
-<summary><b>What are the license terms?</b></summary>
-
-The MIT license in the repository root covers code written for this project. Browser Use-derived documentation diagrams retain their [MIT attribution](docs/images/reference/ATTRIBUTION.md); research patches have separate upstream terms in [NOTICE](NOTICE).
-
-</details>
-
-<details>
-<summary><b>How do I handle private screenshots?</b></summary>
-
-Decide who can access saved originals, image records and agent login details, and how long to keep them. Originals retain their file encoding and EXIF information (such as capture time and location). The demo uses synthetic images only; do not publish request files containing private material.
-
-</details>
-
-<details>
-<summary><b>Does it automatically recognize completed tasks or summarize images?</b></summary>
-
-No. Your agent must mark task states and supply results from completed tasks. ICM checks the result format and image source, but cannot tell whether a result is correct or contains enough information. The existing agent reads and summarizes; the skill guides classification and tool use. `delegate` prepares a worker handoff and the host starts the worker. ICM does not choose crop regions or call models itself.
-
-</details>
-
-<details>
-<summary><b>How do I go into production?</b></summary>
-
-Start with the offline demo, follow the integration requirements in a separate test agent, then check actual outgoing requests, retries, original retrieval and task correctness. The small Codex skill workflow passed functional checks; full default-host history replacement, real-task net benefit and historical-image replacement over WebSocket remain unverified. [Fit and limits](docs/GUIDE.md#is-this-useful-for-your-agent)
-
-</details>
-
-<details>
-<summary><b>Can I retrieve an image after replacing it in requests?</b></summary>
-
-Yes. Rebuild comparison requests from the full original conversation, or use `manager.recall(use)` to check the retrieved file matches the original. Then attach it again and mark it as an image to keep. Replacing an image only changes the outgoing request; it does not delete the original conversation or saved image. [Walkthrough](src/image_context_manager/demo.py)
-
-</details>
-
-<br/>
-
-## Related Components
-
-| Component | What it's for |
+| Available | Important limit |
 | --- | --- |
-| [Skill and setup](docs/AGENT-SETUP.md) | Install guidance and a native visual worker for Claude Code / Codex. |
-| [Local image tools](src/image_context_manager/cli.py) | `icm` commands for compression, cropping, text results, handoffs and recall. |
-| [Persistent workspace](src/image_context_manager/agent.py) | Store originals and results across restarts; check source and version bindings. |
-| [Validation record](docs/VALIDATION.md) | Passed checks and capabilities that remain unverified. |
-| [HistoricalImages](src/image_context_manager/history.py) | Track image uses and states, and choose which images to send. |
-| [AssetStore](src/image_context_manager/core.py) | Save originals and check retrieved files match exactly. |
-| [Offline Demo](src/image_context_manager/demo.py) | Try replacing, comparing and retrieving synthetic images. |
-| [Python Example](examples/offline_demo.py) | Run the installed package from source. |
-| [Integration Requirements](docs/INTEGRATION.md) | Define the history, image information and task states your agent must provide. |
-| [Codex Research Adapter](experiments/codex/README.md) | Codex source changes used in earlier HTTP experiments; research only. |
-| [Transport Diagnostics](experiments/websocket-diagnostics/README.md) | Connection test records and unresolved WebSocket disconnections for large messages. |
+| Local resizing, compression and cropping | Compression can lose detail; cropping needs a verified region |
+| Saved images, versions and text findings | The agent must check whether findings are correct and sufficient |
+| Original-image retrieval | Files stay local; you manage privacy and deletion |
+| Skill and visual-worker installation for both agents | Codex functional workflow tested; Claude Code's actual session remains unverified because of account access |
+| Preparation of future image inputs | **The skill cannot remove images already embedded in the host's conversation history** |
 
-<br/>
+**This is an experimental release, not a proven speedup.** Local tools, installation and 27 tests pass; a Codex session exercised visual-worker inspection, saved findings and exact original recall. Complete real-task A/B performance, cumulative request-byte savings, token/cost savings and WebSocket fixes remain unverified. [Checks and evidence](docs/VALIDATION.md)
 
-[Contributing](CONTRIBUTING.md)
+## If you maintain your own agent
 
-## Citation
+If your program controls every outgoing model request, the separate Python library can replace eligible historical images with saved text in a request copy. This requires integration in your code; installing the skill alone does not enable it. [Python integration requirements](docs/INTEGRATION.md)
 
-If you use Image Context Manager in your research or project, please cite:
+For manual commands, updates and uninstalling, see [tool reference](docs/AGENT-SETUP.md). Developers can find test commands in [Contributing](CONTRIBUTING.md); earlier synthetic HTTP measurements are in [experiments](experiments/README.md).
 
-```bibtex
-@software{image_context_manager2026,
-  author = {messsiii},
-  title = {Image Context Manager},
-  year = {2026},
-  publisher = {GitHub},
-  url = {https://github.com/messsiii/image-context-manager}
-}
-```
-
-<br/>
-
-<div align="center">
-
-**Keep the originals. Send what the task needs.**
-
-<img src="docs/images/reference/studio.jpg" alt="AI-generated illustrative office still life; not the author's actual office or a founder photograph." width="400"/>
-
-[![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
-&emsp;&emsp;&emsp;
-[![License](docs/images/reference/footer-license.svg)](LICENSE)
-
-</div>
-
-<div align="center"> Experimental open source · AI-generated office illustration · <a href="docs/images/reference/ATTRIBUTION.md">Diagram and layout attribution</a> </div>
+[Changelog](CHANGELOG.md) · [License and upstream notices](NOTICE) · [Artwork attribution](docs/images/reference/ATTRIBUTION.md)
