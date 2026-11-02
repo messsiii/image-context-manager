@@ -137,7 +137,7 @@ skill 和本地工具负责准备后续图片输入、保存结论和取回原�
 <br/>
 
 <div align="center">
-<img src="docs/images/reference/studio.jpg" alt="AI-generated office illustration; not a real project office." width="400">
+<p>README 的布局与视觉风格参考了 <a href="https://github.com/browser-use/browser-use">Browser Use</a>。</p>
 
 [![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
 &emsp;

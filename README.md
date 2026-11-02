@@ -137,7 +137,7 @@ This is an experimental release. The 27 local tests pass; a Codex functional ses
 <br/>
 
 <div align="center">
-<img src="docs/images/reference/studio.jpg" alt="AI-generated office illustration; not a real project office." width="400">
+<p>README layout and visual style inspired by <a href="https://github.com/browser-use/browser-use">Browser Use</a>.</p>
 
 [![Source](docs/images/reference/footer-source.svg)](https://github.com/messsiii/image-context-manager)
 &emsp;
