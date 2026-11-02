@@ -93,13 +93,42 @@ Choose by purpose. A caption may need only a crop; judging the layout needs the 
 
 ## Where images become a problem
 
-| Complete workflow | Tasks within an image | What can go wrong |
-| --- | --- | --- |
-| Development and acceptance checks | Find controls, inspect layout, compare changes | Screenshots accumulate; an old interface can be mistaken for the current state |
-| Software operation and business tasks | Read forms, locate action areas, verify state | Screenshots and coordinates become stale; uploaded and submitted states can be confused |
-| Visual asset creation and iteration | Read copy, judge quality, compare versions | Drafts and candidates recur; compressing everything can hide review details |
-| Reading materials and preparing outputs | Extract text, understand charts and spatial relationships | Repeated reading; text or crops can omit headers, units and context |
-| Model testing and evaluation | Read, locate, infer relationships, compare outputs | Different inputs or histories can make a material difference look like a strategy benefit |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Complete workflow</th>
+      <th align="left">Tasks within an image</th>
+      <th align="left">What can go wrong</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Development and acceptance checks</td>
+      <td align="left">Find controls, inspect layout, compare changes</td>
+      <td align="left">Screenshots accumulate; an old interface can be mistaken for the current state</td>
+    </tr>
+    <tr>
+      <td align="left">Software operation and business tasks</td>
+      <td align="left">Read forms, locate action areas, verify state</td>
+      <td align="left">Screenshots and coordinates become stale; uploaded and submitted states can be confused</td>
+    </tr>
+    <tr>
+      <td align="left">Visual asset creation and iteration</td>
+      <td align="left">Read copy, judge quality, compare versions</td>
+      <td align="left">Drafts and candidates recur; compressing everything can hide review details</td>
+    </tr>
+    <tr>
+      <td align="left">Reading materials and preparing outputs</td>
+      <td align="left">Extract text, understand charts and spatial relationships</td>
+      <td align="left">Repeated reading; text or crops can omit headers, units and context</td>
+    </tr>
+    <tr>
+      <td align="left">Model testing and evaluation</td>
+      <td align="left">Read, locate, infer relationships, compare outputs</td>
+      <td align="left">Different inputs or histories can make a material difference look like a strategy benefit</td>
+    </tr>
+  </tbody>
+</table>
 
 App Store Connect (ASC) submission combines **asset creation** and **backend operation** in one conversation: distinguish drafts, candidates and final assets, then verify upload and submission states. Images are reused across these tasks.
 
@@ -113,21 +142,67 @@ Our initial image-task categories are **reading content, locating targets, recog
 
 The experiment called the model through real Codex sessions, using synthetic images and an isolated HTTP configuration. It did not log in to ASC, upload assets or submit an app. Each A/B pair started with empty histories, the same materials, questions and model settings, and ran seven consecutive turns:
 
-| Stage | A: original-image history | B: task-based history handling |
-| --- | --- | --- |
-| New images | Send originals | Send the same originals |
-| Old images from completed tasks | Keep sending them in later turns | Replace them with completed-task text results when preset conditions are met |
-| Later inspection | Inspect originals in history | Retrieve originals when needed |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Stage</th>
+      <th align="left">A: original-image history</th>
+      <th align="left">B: task-based history handling</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">New images</td>
+      <td align="left">Send originals</td>
+      <td align="left">Send the same originals</td>
+    </tr>
+    <tr>
+      <td align="left">Old images from completed tasks</td>
+      <td align="left">Keep sending them in later turns</td>
+      <td align="left">Replace them with completed-task text results when preset conditions are met</td>
+    </tr>
+    <tr>
+      <td align="left">Later inspection</td>
+      <td align="left">Inspect originals in history</td>
+      <td align="left">Retrieve originals when needed</td>
+    </tr>
+  </tbody>
+</table>
 
 The seven turns were **draft reading → version comparison → upload state → version selection → submission state → recall comparison → final check**. Upload and submission states were image-reading questions, not real backend actions. The experiment driver specified task completion and image-retirement conditions; autonomous agent decisions about those conditions were not tested.
 
 All five independent A/B pairs, ten sessions and 70 turns completed. Failed attempts were not selectively discarded. Quality used preset answer checks for every turn; timing measured both time to first token and the full seven-turn workflow.
 
-| Metric | A: original-image history | B: task-based history handling | Change |
-| --- | --- | --- | --- |
-| Cumulative process sends, all five pairs | 305.26 MB | 94.48 MB | 69.0% less |
-| Median complete seven-turn workflow | 57.32 s | 41.79 s | 27.1% less |
-| Answer checks passed | 35 / 35 | 35 / 35 | All checks passed in this set |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Metric</th>
+      <th align="left">A: original-image history</th>
+      <th align="left">B: task-based history handling</th>
+      <th align="left">Change</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Cumulative process sends, all five pairs</td>
+      <td align="left">305.26 MB</td>
+      <td align="left">94.48 MB</td>
+      <td align="left">69.0% less</td>
+    </tr>
+    <tr>
+      <td align="left">Median complete seven-turn workflow</td>
+      <td align="left">57.32 s</td>
+      <td align="left">41.79 s</td>
+      <td align="left">27.1% less</td>
+    </tr>
+    <tr>
+      <td align="left">Answer checks passed</td>
+      <td align="left">35 / 35</td>
+      <td align="left">35 / 35</td>
+      <td align="left">All checks passed in this set</td>
+    </tr>
+  </tbody>
+</table>
 
 <div align="center">
   <a href="docs/images/reference/benchmark-en.jpg">
@@ -145,10 +220,30 @@ Median per-turn time to first token fell by 31.2%. Workflow time includes prepar
 
 A separate WebSocket diagnostic recorded:
 
-| Request | Compressed frame | Result | First token |
-| --- | --- | --- | --- |
-| 4 large images | 10.60 MB | WS success, no retries | 11.47 s |
-| 5 large images, 2 trials | About 13.24 MB | 1009 → HTTP fallback | 57.02 s / 57.44 s |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Request</th>
+      <th align="left">Compressed frame</th>
+      <th align="left">Result</th>
+      <th align="left">First token</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">4 large images</td>
+      <td align="left">10.60 MB</td>
+      <td align="left">WS success, no retries</td>
+      <td align="left">11.47 s</td>
+    </tr>
+    <tr>
+      <td align="left">5 large images, 2 trials</td>
+      <td align="left">About 13.24 MB</td>
+      <td align="left">1009 → HTTP fallback</td>
+      <td align="left">57.02 s / 57.44 s</td>
+    </tr>
+  </tbody>
+</table>
 
 Each five-image trial received 1009 on all six sends before HTTP fallback. The two trials sent 92.88 MB and 92.90 MB at process level. The same five images in an isolated HTTP control sent 13.24 MB, with 10.37 s to first token. File compression alone does not capture this overhead: failures, retries and full elapsed time also matter. These samples do not establish a universal size limit, and ICM does not fix this WebSocket issue. [Diagnostic data](experiments/websocket-results.json)
 

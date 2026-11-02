@@ -93,13 +93,42 @@ python3 -m venv .venv
 
 ## 哪些工作会遇到这个问题
 
-| 完整工作场景 | 图片里要完成的任务 | 容易遇到的问题 |
-| --- | --- | --- |
-| 开发与验收 | 找控件、检查布局、比较修改前后 | 多轮截图累积，旧界面容易与当前状态混淆 |
-| 软件操作与业务办理 | 读表单、定位操作区域、核对状态 | 页面变化后旧截图和坐标失效；已上传与已提交容易混淆 |
-| 视觉素材制作与迭代 | 读文案、判断质量、比较版本 | 草稿和候选版反复出现，全部压缩又可能丢失验收细节 |
-| 材料阅读与成果整理 | 提取文字、理解图表和空间关系 | 重复识读；只留文字或局部可能丢掉表头、单位和关联 |
-| 模型测试与评估 | 识字、定位、判断关系、比较输出 | 两组输入或历史不一致，会把材料差异误当作策略收益 |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">完整工作场景</th>
+      <th align="left">图片里要完成的任务</th>
+      <th align="left">容易遇到的问题</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">开发与验收</td>
+      <td align="left">找控件、检查布局、比较修改前后</td>
+      <td align="left">多轮截图累积，旧界面容易与当前状态混淆</td>
+    </tr>
+    <tr>
+      <td align="left">软件操作与业务办理</td>
+      <td align="left">读表单、定位操作区域、核对状态</td>
+      <td align="left">页面变化后旧截图和坐标失效；已上传与已提交容易混淆</td>
+    </tr>
+    <tr>
+      <td align="left">视觉素材制作与迭代</td>
+      <td align="left">读文案、判断质量、比较版本</td>
+      <td align="left">草稿和候选版反复出现，全部压缩又可能丢失验收细节</td>
+    </tr>
+    <tr>
+      <td align="left">材料阅读与成果整理</td>
+      <td align="left">提取文字、理解图表和空间关系</td>
+      <td align="left">重复识读；只留文字或局部可能丢掉表头、单位和关联</td>
+    </tr>
+    <tr>
+      <td align="left">模型测试与评估</td>
+      <td align="left">识字、定位、判断关系、比较输出</td>
+      <td align="left">两组输入或历史不一致，会把材料差异误当作策略收益</td>
+    </tr>
+  </tbody>
+</table>
 
 ASC 提审把**素材制作**和**后台操作**串在同一会话里：既要区分草稿、候选和最终版，也要核对上传、提交状态。图片会在这些任务之间反复使用。
 
@@ -113,21 +142,67 @@ ASC 提审把**素材制作**和**后台操作**串在同一会话里：既要�
 
 实验通过真实 Codex 会话调用模型，使用合成图片材料和隔离 HTTP 配置；没有登录 ASC、上传素材或提交审核。每组 A、B 都从空会话开始，使用相同材料、问题和模型设置，连续执行七轮：
 
-| 处理环节 | A：保留原图历史 | B：按任务处理旧图 |
-| --- | --- | --- |
-| 新图片 | 输入原图 | 输入同样的原图 |
-| 已完成任务的旧图片 | 后续继续携带 | 符合预设条件后，用已完成任务的文字结果替换 |
-| 后续复查 | 查看历史原图 | 按需取回原图 |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">处理环节</th>
+      <th align="left">A：保留原图历史</th>
+      <th align="left">B：按任务处理旧图</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">新图片</td>
+      <td align="left">输入原图</td>
+      <td align="left">输入同样的原图</td>
+    </tr>
+    <tr>
+      <td align="left">已完成任务的旧图片</td>
+      <td align="left">后续继续携带</td>
+      <td align="left">符合预设条件后，用已完成任务的文字结果替换</td>
+    </tr>
+    <tr>
+      <td align="left">后续复查</td>
+      <td align="left">查看历史原图</td>
+      <td align="left">按需取回原图</td>
+    </tr>
+  </tbody>
+</table>
 
 七轮依次为：**草稿读取 → 版本对比 → 上传状态 → 版本选择 → 提交状态 → 召回比较 → 最终核对**。“上传状态”和“提交状态”是读图回答问题，不是真实后台操作。何时任务完成、哪些旧图可以替换，由实验程序指定，本轮不验证 agent 自主判断这些条件的能力。
 
 共五组独立 A/B 对照、十个会话、70 轮，全部执行完毕，未选择性剔除失败轮次。质量按每轮预设答案检查；速度分别记录首个 token 等待与完整七轮耗时。
 
-| 指标 | A：保留原图历史 | B：按任务处理旧图 | 变化 |
-| --- | --- | --- | --- |
-| 五组累计进程发送量 | 305.26 MB | 94.48 MB | 减少 69.0% |
-| 完整七轮流程耗时中位数 | 57.32 秒 | 41.79 秒 | 减少 27.1% |
-| 答案检查通过 | 35 / 35 | 35 / 35 | 本组检查均通过 |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">指标</th>
+      <th align="left">A：保留原图历史</th>
+      <th align="left">B：按任务处理旧图</th>
+      <th align="left">变化</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">五组累计进程发送量</td>
+      <td align="left">305.26 MB</td>
+      <td align="left">94.48 MB</td>
+      <td align="left">减少 69.0%</td>
+    </tr>
+    <tr>
+      <td align="left">完整七轮流程耗时中位数</td>
+      <td align="left">57.32 秒</td>
+      <td align="left">41.79 秒</td>
+      <td align="left">减少 27.1%</td>
+    </tr>
+    <tr>
+      <td align="left">答案检查通过</td>
+      <td align="left">35 / 35</td>
+      <td align="left">35 / 35</td>
+      <td align="left">本组检查均通过</td>
+    </tr>
+  </tbody>
+</table>
 
 <div align="center">
   <a href="docs/images/reference/benchmark-zh-CN.jpg">
@@ -145,10 +220,30 @@ ASC 提审把**素材制作**和**后台操作**串在同一会话里：既要�
 
 另一组 WebSocket 诊断记录到：
 
-| 图片请求 | 压缩后的请求帧 | 结果 | 首个 token 等待 |
-| --- | --- | --- | --- |
-| 4 张大图 | 10.60 MB | WebSocket 成功，无重试 | 11.47 秒 |
-| 5 张大图，两次试验 | 约 13.24 MB | 1009 → 回退 HTTP | 57.02 秒 / 57.44 秒 |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">图片请求</th>
+      <th align="left">压缩后的请求帧</th>
+      <th align="left">结果</th>
+      <th align="left">首个 token 等待</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">4 张大图</td>
+      <td align="left">10.60 MB</td>
+      <td align="left">WebSocket 成功，无重试</td>
+      <td align="left">11.47 秒</td>
+    </tr>
+    <tr>
+      <td align="left">5 张大图，两次试验</td>
+      <td align="left">约 13.24 MB</td>
+      <td align="left">1009 → 回退 HTTP</td>
+      <td align="left">57.02 秒 / 57.44 秒</td>
+    </tr>
+  </tbody>
+</table>
 
 五张图的每次试验都有 6 次发送收到 1009，随后回退 HTTP；两次进程发送量分别为 92.88 MB、92.90 MB。同样五张图在隔离 HTTP 对照中发送了 13.24 MB，首个 token 等待 10.37 秒。这说明只看文件压缩率不够，还要记录失败、重试和完整耗时；这些样本尚不能确定通用大小上限，ICM 也没有修复该 WebSocket 问题。[诊断数据](experiments/websocket-results.json)
 
