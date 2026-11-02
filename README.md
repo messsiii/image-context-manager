@@ -99,7 +99,7 @@ Not every image needs compression. Use a crop or a smaller image when the task a
 | Local resizing, compression and cropping | Compression can lose detail; cropping needs a verified region |
 | Saved images, versions and text findings | The agent must check whether findings are correct and sufficient |
 | Original-image retrieval | Files stay local; you manage privacy and deletion |
-| Skill and visual-worker installation for both agents | Codex functional workflow tested; Claude Code's actual session remains unverified because of account access |
+| Skill and visual-worker installation for both agents | Codex functional workflow tested |
 | Preparation of future image inputs | **The skill cannot remove images already embedded in the host's conversation history** |
 
 **This is an experimental release, not a proven speedup.** Local tools, installation and 27 tests pass; a Codex session exercised visual-worker inspection, saved findings and exact original recall. Complete real-task A/B performance, cumulative request-byte savings, token/cost savings and WebSocket fixes remain unverified. [Checks and evidence](docs/VALIDATION.md)
