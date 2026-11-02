@@ -1,8 +1,8 @@
 <div align="center">
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-light.png">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-dark.png">
-  <img alt="Image Context Manager — original monochrome image-frame wordmark." src="docs/images/reference/wordmark-light.png" width="100%">
+  <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-v2-light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-v2-dark.png">
+  <img alt="ICM — Image Context Manager. Stacked image frames and monochrome lettering." src="docs/images/reference/wordmark-v2-light.png" width="100%">
 </picture>
 </div>
 
