@@ -1,0 +1,12 @@
+{
+  "scope": "offline synthetic demo replay; generated from actual saved artifacts, no model/network/ASC recording",
+  "source_demo_sha256": "a4688ffd595cbe532cda158ed13232630a6b128f1d969e56afb2fe0dfb695267",
+  "report_sha256": "3c12ca8096dc44c650af3744cd2016a726455fe5e6e476d94115a73b0c6ff59e",
+  "requests_sha256": "2d5d77a79d7ef15766475dad16133b2d4e0ce5482cfcfecd46e79503516485a6",
+  "image_counts": {
+    "initial": 3,
+    "retired": 2,
+    "comparison": 3,
+    "recall": 3
+  }
+}

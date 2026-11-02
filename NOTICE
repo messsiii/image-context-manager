@@ -24,3 +24,10 @@ Pillow is an external runtime dependency and retains its HPND license and
 third-party notices. Setuptools and wheel are external build dependencies
 with their own licenses. Their source/binaries are not vendored here.
 No Codex, Rust toolchain, model weights or third-party screenshots are bundled.
+
+The path and architecture diagrams under docs/images/reference/ adapt MIT-
+licensed Browser Use SVG artwork at revision
+b49a68e4060acb226da8f784194fef301c53a6d7. Copyright (c) 2024 Gregor Zunic.
+Their license and detailed attribution are preserved in that directory as
+UPSTREAM_LICENSE and ATTRIBUTION.md. Labels and descriptions were adapted
+to Image Context Manager; all other new visual assets are first-party.
