@@ -1,8 +1,10 @@
+<div align="center">
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-light.png">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-dark.png">
   <img alt="Image Context Manager — original monochrome image-frame wordmark." src="docs/images/reference/wordmark-light.png" width="100%">
 </picture>
+</div>
 
 <div align="center">
 <picture>
@@ -42,11 +44,13 @@
   <img src="docs/images/reference/canyon.jpg" alt="Illustration: an image frame bridges a canyon." width="720">
 </div>
 
-<div align="center">
+**面向 Computer Use agent 的图片上下文管理工具。** Image Context Manager（ICM）为 Claude Code 和 Codex 提供 skill 与本地工具，按任务选择原图、裁剪图、压缩图或文字结论，支持子 agent 看图，并在需要时取回原图。
 
-用 Claude Code 或 Codex 处理截图和视觉素材时，让 agent **按任务选择原图、裁剪图、压缩图或文字结论**。Image Context Manager（ICM）提供对应的 skill 和本地工具，也支持看图子 agent，原图保留供后续复查。
+## 要解决的问题：Computer Use 不断产生截图
 
-</div>
+Computer Use（让 agent 操作浏览器和桌面软件）会反复执行：**看屏幕 → 操作 → 检查结果**。浏览页面、填写表单、验收界面、迭代素材，都会在过程中不断产生截图。旧图如果持续进入后续模型输入，即使每张图很小，历史也会越积越大。反复携带这些历史，会增加请求传输量和模型输入负担，也可能拖慢后续操作。过时页面和多个素材版本还会干扰对当前状态的判断。
+
+这是 Computer Use 接入中共同面对的问题。Anthropic 的 [Computer Use 实践指南](https://claude.com/resources/articles/best-practices-for-computer-and-browser-use-with-claude)也专门讨论了截图累积、旧图清理和上下文压缩。我们关注的是：**下一步还需要哪些图片信息、用什么形式保留、什么时候取回原图**。下面用五类工作场景和实测数据具体展开。
 
 # 快速开始
 
@@ -76,12 +80,14 @@ python3 -m venv .venv
 
 ## 图片到底怎么处理
 
+<div align="center">
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-zh-CN-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/tool-workflow-zh-CN-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-zh-CN-dark.svg">
   <img alt="图片处理流程：判断用途、准备图片、看图核对、保存结论，并按需取回原图。" src="docs/images/reference/tool-workflow-zh-CN-light.svg" width="720">
 </picture>
+</div>
 
 先判断用途，再选择处理方式。读一句标题可以只看局部，判断整体排版则保留完整画面；看图子 agent 可以只回传文字。正在使用、等待核验或需要比较的图片保留必要细节，结论核对完成且足够使用后复用文字，需要复查时取回原图。
 

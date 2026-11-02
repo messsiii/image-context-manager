@@ -1,8 +1,10 @@
+<div align="center">
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/images/reference/wordmark-light.png">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/wordmark-dark.png">
   <img alt="Image Context Manager — original monochrome image-frame wordmark." src="docs/images/reference/wordmark-light.png" width="100%">
 </picture>
+</div>
 
 <div align="center">
 <picture>
@@ -42,11 +44,13 @@
   <img src="docs/images/reference/canyon.jpg" alt="Illustration: an image frame bridges a canyon." width="720">
 </div>
 
-<div align="center">
+**Image context management for Computer Use agents.** Image Context Manager (ICM) gives Claude Code and Codex a skill and local tools to choose originals, crops, compressed images or text findings, delegate visual inspection and retrieve originals when needed.
 
-Give Claude Code or Codex a **skill and local tools to choose between originals, crops, compressed images and text findings** for each screenshot or visual asset. Image Context Manager (ICM) also supports a separate visual worker and keeps originals for later checks.
+## The problem: Computer Use keeps generating screenshots
 
-</div>
+Computer Use agents repeat a loop: **look at the screen → act → check the result**. Browser navigation, form filling, UI checks and asset iteration produce screenshots throughout a task. When old images remain in later model inputs, even small screenshots can build up a large history. Carrying that history forward can increase request size, model input and latency. Stale screens and competing asset versions also make it harder to identify the current state.
+
+This is a shared challenge for Computer Use integrations. Anthropic's [Computer Use guidance](https://claude.com/resources/articles/best-practices-for-computer-and-browser-use-with-claude) explicitly addresses screenshot accumulation, pruning and compaction. Our focus is **which image information the next step needs, how to represent it and when to retrieve the original**. The five workflow examples and measured results below make that problem concrete.
 
 # Quickstart
 
@@ -76,12 +80,14 @@ For example: check two versions of App Store screenshots, compare their headline
 
 ## How it chooses what to keep
 
+<div align="center">
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-en-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/images/reference/tool-workflow-en-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/reference/tool-workflow-en-dark.svg">
   <img alt="Image workflow: identify the task, prepare an image, inspect it, save findings and recall originals." src="docs/images/reference/tool-workflow-en-light.svg" width="720">
 </picture>
+</div>
 
 Choose by purpose. A caption may need only a crop; judging the layout needs the full view. A visual worker can return text findings. Keep the detail needed for active work, pending checks and comparisons; reuse text once findings are checked and sufficient, and retrieve originals for another inspection.
 
