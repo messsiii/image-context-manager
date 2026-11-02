@@ -11,7 +11,9 @@
 [![Preview 0.1.1a1](https://img.shields.io/badge/preview-0.1.1a1-315ee8)](https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-617085)](pyproject.toml)
 
-[快速开始](#快速开始) · [接入指南](docs/INTEGRATION.zh-CN.md) · [工作流指南](docs/GUIDE.zh-CN.md) · [English](README.md)
+[快速开始](#快速开始) · [接入指南](docs/INTEGRATION.zh-CN.md) · [工作流指南](docs/GUIDE.zh-CN.md)
+
+[English](README.md)
 
 </div>
 

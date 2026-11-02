@@ -11,7 +11,9 @@
 [![Preview 0.1.1a1](https://img.shields.io/badge/preview-0.1.1a1-315ee8)](https://github.com/messsiii/image-context-manager/releases/tag/v0.1.1a1)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-617085)](pyproject.toml)
 
-[Quickstart](#quickstart) · [Integration](docs/INTEGRATION.md) · [Workflow guide](docs/GUIDE.md) · [中文](README.zh-CN.md)
+[Quickstart](#quickstart) · [Integration](docs/INTEGRATION.md) · [Workflow guide](docs/GUIDE.md)
+
+[简体中文](README.zh-CN.md)
 
 </div>
 

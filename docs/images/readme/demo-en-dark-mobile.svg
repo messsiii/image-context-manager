@@ -11,7 +11,7 @@
 <circle cx="54" cy="146" r="5" fill="#a9b8cd"/>
 <path d="M48 181 l22.44 -19.6 16.32 11.200000000000001 25.5 -26.6 20.400000000000002 35.0Z" fill="#a9b8cd" opacity=".38"/>
 <text x="36" y="221" font-size="21" class="label" text-anchor="start">Draft</text>
-<text x="36" y="247" font-size="18" class="muted" text-anchor="start">Read complete</text>
+<text x="36" y="247" font-size="18" class="muted" text-anchor="start">Read done</text>
 <rect x="154" y="127" width="102" height="70" rx="6" fill="#253140" stroke="#39485d"/>
 <circle cx="172" cy="146" r="5" fill="#87a9ff"/>
 <path d="M166 181 l22.44 -19.6 16.32 11.200000000000001 25.5 -26.6 20.400000000000002 35.0Z" fill="#87a9ff" opacity=".38"/>
