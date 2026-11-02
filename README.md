@@ -44,9 +44,7 @@
 
 <div align="center">
 
-When Claude Code or Codex takes screenshots, checks designs or compares image versions, images can accumulate in the conversation. Image Context Manager (ICM) gives the agent a **skill that explains how to handle them, plus local tools to do the work**.
-
-The agent can crop a relevant region, compress an image, save checked findings as text, or ask a separate visual worker to inspect an image. Originals stay available for later checks.
+Give Claude Code or Codex a **skill and local tools to choose between originals, crops, compressed images and text findings** for each screenshot or visual asset. Image Context Manager (ICM) also supports a separate visual worker and keeps originals for later checks.
 
 </div>
 
@@ -54,7 +52,7 @@ The agent can crop a relevant region, compress an image, save checked findings a
 
 ## Install
 
-Requires Python 3.9+ and Claude Code or Codex. Run in a terminal:
+Requires Python 3.9+ and Claude Code or Codex:
 
 ```sh
 git clone https://github.com/messsiii/image-context-manager.git
@@ -64,22 +62,17 @@ python3 -m venv .venv
 .venv/bin/icm install --agent both --project /absolute/path/to/your-project
 ```
 
-Replace `/absolute/path/to/your-project` with the project where you use your agent. Choose `--agent codex`, `--agent claude` or `--agent both`.
+Replace `/absolute/path/to/your-project` with your project's absolute path. To install for one agent, change `both` to `codex` or `claude`.
 
-This installs the skill and a visual-worker definition into that project. Keep this repository and its `.venv` at the same location: the installed tools use that Python environment. No additional model API, server or cloud storage is needed; your agent uses its existing account.
+Keep this repository and `.venv` at the same location after installation; the tools use that Python environment.
 
 ## Use it
 
 Start a **new Claude Code or Codex session in your project**, then ask:
 
-> Use image-context-manager for screenshots and visual assets in this task. Prefer text when it is sufficient. Keep originals; crop or compress only when the task permits. Use a visual worker for image inspection when available, and return text findings to the main conversation.
+> Use image-context-manager to manage screenshots and visual assets for this task.
 
-For example, while preparing App Store screenshots:
-
-1. The agent saves each original and records its version and purpose.
-2. To read a caption, it can inspect a verified crop; to compare layouts or judge visual quality, it keeps the original.
-3. A visual worker can inspect the images in its own conversation and return findings as text.
-4. After the findings are checked and sufficient, the agent can reuse that text for later steps. If you ask to compare versions again, it retrieves the originals.
+For example: check two versions of App Store screenshots, compare their headlines and layouts, recheck after edits, and retrieve an older version when needed.
 
 ## How it chooses what to keep
 
@@ -90,27 +83,56 @@ For example, while preparing App Store screenshots:
   <img alt="Image workflow: identify the task, prepare an image, inspect it, save findings and recall originals." src="docs/images/reference/tool-workflow-en-light.svg" width="720">
 </picture>
 
-Not every image needs compression. Use a crop or a smaller image when the task allows; keep the original for layout comparisons, visual quality checks or uncertain details. Reuse text only after the findings are checked and sufficient, and retrieve the original when another check is needed. Claude Code or Codex launches the optional visual worker; ICM prepares its handoff files.
+Choose by purpose. A caption may need only a crop; judging the layout needs the full view. A visual worker can return text findings. Keep the detail needed for active work, pending checks and comparisons; reuse text once findings are checked and sufficient, and retrieve originals for another inspection.
 
-## What works today — and what does not
+## Where images become a problem
 
-| Available | Important limit |
-| --- | --- |
-| Local resizing, compression and cropping | Compression can lose detail; cropping needs a verified region |
-| Saved images, versions and text findings | The agent must check whether findings are correct and sufficient |
-| Original-image retrieval | Files stay local; you manage privacy and deletion |
-| Skill and visual-worker installation for both agents | Codex functional workflow tested |
-| Preparation of future image inputs | **The skill cannot remove images already embedded in the host's conversation history** |
+| Complete workflow | Tasks within an image | What can go wrong |
+| --- | --- | --- |
+| Development and acceptance checks | Find controls, inspect layout, compare changes | Screenshots accumulate; an old interface can be mistaken for the current state |
+| Software operation and business tasks | Read forms, locate action areas, verify state | Screenshots and coordinates become stale; uploaded and submitted states can be confused |
+| Visual asset creation and iteration | Read copy, judge quality, compare versions | Drafts and candidates recur; compressing everything can hide review details |
+| Reading materials and preparing outputs | Extract text, understand charts and spatial relationships | Repeated reading; text or crops can omit headers, units and context |
+| Model testing and evaluation | Read, locate, infer relationships, compare outputs | Different inputs or histories can make a material difference look like a strategy benefit |
 
-**This is an experimental release, not a proven speedup.** Local tools, installation and 27 tests pass; a Codex session exercised visual-worker inspection, saved findings and exact original recall. Complete real-task A/B performance, cumulative request-byte savings, token/cost savings and WebSocket fixes remain unverified. [Checks and evidence](docs/VALIDATION.md)
+App Store Connect (ASC) submission combines **asset creation** and **backend operation** in one conversation: distinguish drafts, candidates and final assets, then verify upload and submission states. Images are reused across these tasks.
 
-## If you maintain your own agent
+Our initial image-task categories are **reading content, locating targets, recognizing state, understanding relationships, judging quality, comparing changes and extracting action information**. One image can serve several tasks: finishing a text read does not finish its comparison or verification. Even small images still need rules for repeated inspection, versions and reuse of findings.
 
-If your program controls every outgoing model request, the separate Python library can replace eligible historical images with saved text in a request copy. This requires integration in your code; installing the skill alone does not enable it. [Python integration requirements](docs/INTEGRATION.md)
+## Measured results
 
-For manual commands, updates and uninstalling, see [tool reference](docs/AGENT-SETUP.md). Developers can find test commands in [Contributing](CONTRIBUTING.md); earlier synthetic HTTP measurements are in [experiments](experiments/README.md).
+### Accumulating image history: five A/B pairs, 70 turns
 
-[Changelog](CHANGELOG.md) · [License and upstream notices](NOTICE) · [Artwork attribution](docs/images/reference/ATTRIBUTION.md)
+**This was a synthetic-task experiment in an isolated Codex HTTP setup, not a real ASC speedup from installing the skill.** A kept original-image history; B replaced eligible old images in later requests with results from completed tasks. The experiment driver supplied task stages.
+
+Each pair used two independent conversations, each running seven turns: draft reading → version comparison → upload state → version selection → submission state → recall comparison → final check. All five pairs completed.
+
+| Metric | A: original-image history | B: task-based history handling | Change |
+| --- | --- | --- | --- |
+| Cumulative process sends, all five pairs | 305.26 MB | 94.48 MB | 69.0% less |
+| Median complete seven-turn workflow | 57.32 s | 41.79 s | 27.1% less |
+| Answer checks passed | 35 / 35 | 35 / 35 | All checks passed in this set |
+
+Median per-turn time to first token fell by 31.2%. Workflow time includes preparation and processing, excluding fixed observation waits. Send totals are process network counters including startup, control traffic, TLS, retries and fallback. MB means 1,000,000 bytes; these are not image-file sizes or token counts. Cost savings were not measured. [Original aggregate](experiments/http-results.json) · [Setup and provenance](experiments/README.md)
+
+### Large image requests: retries can multiply the overhead
+
+A separate WebSocket diagnostic recorded:
+
+| Request | Compressed frame | Result | First token |
+| --- | --- | --- | --- |
+| 4 large images | 10.60 MB | WS success, no retries | 11.47 s |
+| 5 large images, 2 trials | About 13.24 MB | 1009 → HTTP fallback | 57.02 s / 57.44 s |
+
+Each five-image trial received 1009 on all six sends before HTTP fallback. The two trials sent 92.88 MB and 92.90 MB at process level. The same five images in an isolated HTTP control sent 13.24 MB, with 10.37 s to first token. File compression alone does not capture this overhead: failures, retries and full elapsed time also matter. These samples do not establish a universal size limit, and ICM does not fix this WebSocket issue. [Diagnostic data](experiments/websocket-results.json)
+
+## Integration scope
+
+The skill and local tools prepare future image inputs, save findings and retrieve originals. **They cannot remove images already embedded in Claude Code or Codex conversation history.** If your own agent controls every complete request, the Python library can manage historical images: [integration requirements](docs/INTEGRATION.md).
+
+This is an experimental release. The 27 local tests pass; a Codex functional session verified tool calls, visual-worker inspection, saved findings and original recall. Speedups in real workflows still need a separate controlled comparison. [Validation record](docs/VALIDATION.md)
+
+[Commands, updates and uninstalling](docs/AGENT-SETUP.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [License](NOTICE) · [Artwork attribution](docs/images/reference/ATTRIBUTION.md)
 
 <br/>
 
